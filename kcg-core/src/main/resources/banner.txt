@@ -1,0 +1,20 @@
+KKKKKKKKK    KKKKKKK        CCCCCCCCCCCCC        GGGGGGGGGGGGG
+K:::::::K    K:::::K     CCC::::::::::::C     GGG::::::::::::G
+K:::::::K    K:::::K   CC:::::::::::::::C   GG:::::::::::::::G
+K:::::::K   K::::::K  C:::::CCCCCCCC::::C  G:::::GGGGGGGG::::G
+KK::::::K  K:::::KKK C:::::C       CCCCCC G:::::G       GGGGGG
+  K:::::K K:::::K   C:::::C              G:::::G              
+  K::::::K:::::K    C:::::C              G:::::G              
+  K:::::::::::K     C:::::C              G:::::G    GGGGGGGGGG
+  K:::::::::::K     C:::::C              G:::::G    G::::::::G
+  K::::::K:::::K    C:::::C              G:::::G    GGGGG::::G
+  K:::::K K:::::K   C:::::C              G:::::G        G::::G
+KK::::::K  K:::::KKK C:::::C       CCCCCC G:::::G       G::::G
+K:::::::K   K::::::K  C:::::CCCCCCCC::::C  G:::::GGGGGGGG::::G
+K:::::::K    K:::::K   CC:::::::::::::::C   GG:::::::::::::::G
+K:::::::K    K:::::K     CCC::::::::::::C     GGG::::::GGG:::G
+KKKKKKKKK    KKKKKKK        CCCCCCCCCCCCC        GGGGGG   GGGG
+KCG:${project.version}
+Pid:${pid}
+Network:
+  http://${kcg.local.ip}:${kcg.local.port}${kcg.local.context-path}/index.html

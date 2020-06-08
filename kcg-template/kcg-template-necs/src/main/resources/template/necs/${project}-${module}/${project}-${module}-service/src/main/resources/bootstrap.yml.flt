@@ -1,0 +1,42 @@
+debug: true
+server:
+  port: 8201
+  error:
+    include-stacktrace: ALWAYS   # 输出异常栈信息, 生产环境删除
+spring:
+  application:
+    name: ${project}-${module}-service
+  cloud:
+    discovery:
+      enabled: true
+    nacos:
+      config:
+        enabled: true
+        server-addr: 172.16.2.80:8848
+        file-extension: yaml
+      discovery:
+        enabled: true
+        server-addr: 172.16.2.80:8848
+${project}:
+  db:
+    data-source:
+      enabled: true
+      druid:
+        d1:
+          url: jdbc:zenith:@172.16.2.156:1888
+          driver-class-name: com.huawei.gauss.jdbc.ZenithDriver
+          username: emergency
+          password: emergency_123
+          default-auto-commit: false
+          validation-query: select 1 from dual
+    hibernate:
+      enabled: true
+      session-factory:
+        default:
+          hibernate-properties:
+            "[hibernate.dialect]": fhafw.commons.db.orm.hibernate.dialect.GaussDB100Dialect
+            "[hibernate.show_sql]": true
+        s1:
+          packages-to-scan: 
+            - ${project}.${module}.pojo.entity
+            - ${project}.${module}.pojo.view

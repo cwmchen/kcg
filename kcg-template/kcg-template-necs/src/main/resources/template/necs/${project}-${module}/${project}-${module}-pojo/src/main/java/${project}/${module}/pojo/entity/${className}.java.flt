@@ -1,0 +1,54 @@
+package ${project}.${module}.pojo.entity;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+import org.hibernate.annotations.GenericGenerator;
+
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import fhafw.framework.annotation.Comment;
+import fhafw.framework.mapping.Operate;
+import fhafw.framework.mapping.SuperEntity;
+
+<#list imports as ipt>
+import ${ipt};
+</#list>
+
+/**
+ * ${tableComment}
+ */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+@Entity(name = "${tableName}")
+public class ${className} extends SuperEntity<Operate> {
+
+   <#assign ignoreColumnNames = ["if_del", "create_user", "create_time", "update_user", "update_time"]>
+   <#list columns as column>
+        <#if ignoreColumnNames?seq_index_of(column.columnName?lower_case) = -1 >
+    @Comment("${column.columnComment}")
+            <#list primaryKeys as primaryKey>
+                <#if primaryKey.columnName?lower_case == column.columnName?lower_case>
+    @Id
+                </#if>
+            </#list>
+    @Column(name = "${column.columnName}")
+            <#list primaryKeys as primaryKey>
+                <#if primaryKey.columnName?lower_case == column.columnName?lower_case>
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+                </#if>
+            </#list>
+    private ${column.fieldType.fieldType}     ${column.fieldName}<#if column.fieldType.value !="" > = ${column.fieldType.value}</#if>;
+
+        </#if>
+   </#list>
+}

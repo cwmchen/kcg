@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<parent>
+        <groupId>com.oursdfl.${project}</groupId>
+        <artifactId>${project}</artifactId>
+        <version>${version}</version>
+    </parent>
+
+	<artifactId>${project}-${module}</artifactId>
+	<name>${project}-${module}</name>
+	<packaging>pom</packaging>
+
+	<modules>
+		<module>${project}-${module}-pojo</module>
+        <module>${project}-${module}-service</module>
+		<module>${project}-${module}-api</module>
+	</modules>
+</project>

@@ -1,0 +1,37 @@
+package ${project}.${module}.api.feign;
+
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import fhafw.framework.mapping.Page;
+import fhafw.framework.mapping.PageBean;
+import ${project}.${module}.pojo.entity.${className};
+
+/**
+ * ${tableComment}客户端服务
+ */
+@FeignClient(value = "necs-${module}-service", qualifier = Feign${className}Service.DEFAULT_SERVICE_NAME)
+public interface Feign${className}Service {
+
+    public static final String DEFAULT_REQUEST_MAPPING = "${className?uncap_first}Service";
+    public static final String DEFAULT_SERVICE_NAME    = "feign${className}Service";
+
+    @PostMapping("/" + DEFAULT_REQUEST_MAPPING + "/save")
+    public ${className} save${className}(@RequestBody ${className} ${className?uncap_first});
+
+    @DeleteMapping("/" + DEFAULT_REQUEST_MAPPING + "/{<#list columns as column><#list primaryKeys as primaryKey><#if primaryKey.columnName?lower_case == column.columnName?lower_case>${column.fieldName}</#if></#list></#list>}")
+    public ${className} remove${className}(@PathVariable String <#list columns as column><#list primaryKeys as primaryKey><#if primaryKey.columnName?lower_case == column.columnName?lower_case>${column.fieldName}</#if></#list></#list>);
+
+    @PostMapping("/" + DEFAULT_REQUEST_MAPPING + "/update")
+    public ${className} update${className}(@RequestBody ${className} ${className?uncap_first});
+
+    @GetMapping("/" + DEFAULT_REQUEST_MAPPING + "/{<#list columns as column><#list primaryKeys as primaryKey><#if primaryKey.columnName?lower_case == column.columnName?lower_case>${column.fieldName}</#if></#list></#list>}")
+    public ${className} get${className}(@PathVariable String <#list columns as column><#list primaryKeys as primaryKey><#if primaryKey.columnName?lower_case == column.columnName?lower_case>${column.fieldName}</#if></#list></#list>);
+
+    @PostMapping("/" + DEFAULT_REQUEST_MAPPING + "/page")
+    public Page<${className}> get${className}ForPage(@RequestBody PageBean pageBean);
+}
