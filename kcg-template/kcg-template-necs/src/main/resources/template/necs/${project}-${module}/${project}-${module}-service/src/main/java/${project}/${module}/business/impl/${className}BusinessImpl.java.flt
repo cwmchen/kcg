@@ -1,0 +1,37 @@
+package ${project}.${module}.business.impl;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.stereotype.Service;
+
+import fhafw.commons.db.orm.hibernate.HibernateTemplate;
+import fhafw.framework.mapping.Page;
+import fhafw.framework.mapping.PageBean;
+import ${project}.${module}.business.I${className}Business;
+import ${project}.${module}.pojo.entity.${className};
+
+@Service
+public class ${className}BusinessImpl extends HibernateTemplate implements I${className}Business {
+
+    @Override
+    public ${className} remove${className}(String <#list columns as column><#list primaryKeys as primaryKey><#if primaryKey.columnName?lower_case == column.columnName?lower_case>${column.fieldName}</#if></#list></#list>) {
+        return super.remove(get${className}(<#list columns as column><#list primaryKeys as primaryKey><#if primaryKey.columnName?lower_case == column.columnName?lower_case>${column.fieldName}</#if></#list></#list>));
+    }
+
+    @Override
+    public ${className} get${className}(String <#list columns as column><#list primaryKeys as primaryKey><#if primaryKey.columnName?lower_case == column.columnName?lower_case>${column.fieldName}</#if></#list></#list>) {
+        String hql = "from " + ${className}.class.getName() + " where <#list columns as column><#list primaryKeys as primaryKey><#if primaryKey.columnName?lower_case == column.columnName?lower_case>${column.fieldName}</#if></#list></#list>=:<#list columns as column><#list primaryKeys as primaryKey><#if primaryKey.columnName?lower_case == column.columnName?lower_case>${column.fieldName}</#if></#list></#list> and ifDel='0'";
+        
+        Map<String, Object> params = new HashMap<>();
+        params.put("<#list columns as column><#list primaryKeys as primaryKey><#if primaryKey.columnName?lower_case == column.columnName?lower_case>${column.fieldName}</#if></#list></#list>", <#list columns as column><#list primaryKeys as primaryKey><#if primaryKey.columnName?lower_case == column.columnName?lower_case>${column.fieldName}</#if></#list></#list>);
+
+        return super.find(hql, params);
+    }
+
+    @Override
+    public Page<${className}> get${className}ForPage(PageBean pageBean) {
+        String hql = "from " + ${className}.class.getName() + " where ifDel='0'";
+        return super.findForPage(hql, pageBean);
+    }
+}

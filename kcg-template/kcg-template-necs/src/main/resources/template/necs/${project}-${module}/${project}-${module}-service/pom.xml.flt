@@ -1,0 +1,146 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.oursdfl.${project}</groupId>
+        <artifactId>${project}</artifactId>
+        <version>${version}</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+	<artifactId>${project}-${module}-service</artifactId>
+	<name>${project}-${module}-service</name>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
+		</dependency>
+
+		<!-- 使用 nacos 的配置中心，注册中心 -->
+		<dependency>
+			<groupId>com.alibaba.cloud</groupId>
+			<artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba.cloud</groupId>
+			<artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+		</dependency>
+		<!-- 使用 nacos 的配置中心，注册中心 -->
+
+		<!-- 使用 openfeign 进行服务调用 -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-openfeign</artifactId>
+		</dependency>
+		<!-- 使用 openfeign 进行服务调用 -->
+
+
+		<dependency>
+			<groupId>com.oursdfl.framework</groupId>
+			<artifactId>fhafw-framework</artifactId>
+			<version>${fhafw_version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.oursdfl.framework</groupId>
+			<artifactId>fhafw-commons-core</artifactId>
+			<version>${fhafw_version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.oursdfl.framework</groupId>
+			<artifactId>fhafw-commons-db-orm-hibernate</artifactId>
+			<version>${fhafw_version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.oursdfl.framework</groupId>
+			<artifactId>fhafw-autoconfigure</artifactId>
+			<version>${fhafw_version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.oursdfl.${project}</groupId>
+			<artifactId>${project}-${module}-pojo</artifactId>
+			<version>${project_version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.huawei.gauss</groupId>
+			<artifactId>com.huawei.gauss.jdbc.ZenithDriver</artifactId>
+			<version>GaussDB_100_1.0.1.SPC2.B002</version>
+		</dependency>
+
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+		</dependency>
+	</dependencies>
+
+	<profiles>
+		<!-- 命令： mvn -P release clean package install -U -->
+		<profile>
+			<id>release</id>
+			<activation>
+				<!-- 默认激活不激活 -->
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+						<configuration>
+						    <mainClass>${project}.${module}.${moduleClassName}ServiceApplication</mainClass>
+							<finalName>server</finalName>
+							<layout>ZIP</layout>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-assembly-plugin</artifactId>
+						<configuration>
+							<descriptors>
+								<!--配置描述文件路径 -->
+								<descriptor>../../resources/release.xml</descriptor>
+							</descriptors>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		
+        <!-- 发布 docker 镜像 -->
+        <!-- 命令： mvn -P release-docker clean package docker:build docker:push -->
+        <profile>
+            <id>release-docker</id>
+            <activation>
+                <!-- 默认激活不激活 -->
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>io.fabric8</groupId>
+                        <artifactId>docker-maven-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+	</profiles>
+</project>

@@ -1,0 +1,32 @@
+debug: false
+server:
+  port: 8202
+  error:
+    include-stacktrace: ALWAYS   # 输出异常栈信息, 生产环境删除
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: ${project}-${module}-api
+  cloud:
+    discovery:
+      enabled: true
+    nacos:
+      config:
+        enabled: true
+        server-addr: 172.16.2.80:8848
+        file-extension: yaml
+      discovery:
+        enabled: true
+        server-addr: 172.16.2.80:8848
+  redis:
+    database: 1
+    host: 172.16.2.81
+    port: 6379
+  session:
+    redis:
+      namespace: "${project}:spring:session"
+${project}: 
+  session:
+    enabled: true
+    enabled-cookie: true

@@ -1,0 +1,52 @@
+package ${project}.${module}.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import fhafw.framework.mapping.Page;
+import fhafw.framework.mapping.PageBean;
+import fhafw.framework.service.IBaseService;
+import ${project}.${module}.business.I${className}Business;
+import ${project}.${module}.pojo.entity.${className};
+
+/**
+ * ${tableComment}服务
+ */
+@RestController
+@RequestMapping("/${className?uncap_first}Service")
+public class ${className}Service implements IBaseService {
+
+    @Autowired
+    private I${className}Business ${className?uncap_first}Business;
+
+    @PostMapping("/save")
+    public ${className} save${className}(@RequestBody ${className} ${className?uncap_first}) {
+        return ${className?uncap_first}Business.merge(${className?uncap_first});
+    }
+
+    @DeleteMapping("/{<#list columns as column><#list primaryKeys as primaryKey><#if primaryKey.columnName?lower_case == column.columnName?lower_case>${column.fieldName}</#if></#list></#list>}")
+    public ${className} remove${className}(@PathVariable String <#list columns as column><#list primaryKeys as primaryKey><#if primaryKey.columnName?lower_case == column.columnName?lower_case>${column.fieldName}</#if></#list></#list>) {
+        return ${className?uncap_first}Business.remove${className}(<#list columns as column><#list primaryKeys as primaryKey><#if primaryKey.columnName?lower_case == column.columnName?lower_case>${column.fieldName}</#if></#list></#list>);
+    }
+
+    @PostMapping("/update")
+    public ${className} update${className}(@RequestBody ${className} ${className?uncap_first}) {
+        return ${className?uncap_first}Business.update(${className?uncap_first});
+    }
+
+    @GetMapping("/{<#list columns as column><#list primaryKeys as primaryKey><#if primaryKey.columnName?lower_case == column.columnName?lower_case>${column.fieldName}</#if></#list></#list>}")
+    public ${className} get${className}(@PathVariable String <#list columns as column><#list primaryKeys as primaryKey><#if primaryKey.columnName?lower_case == column.columnName?lower_case>${column.fieldName}</#if></#list></#list>) {
+        return ${className?uncap_first}Business.get${className}(<#list columns as column><#list primaryKeys as primaryKey><#if primaryKey.columnName?lower_case == column.columnName?lower_case>${column.fieldName}</#if></#list></#list>);
+    }
+
+    @PostMapping("/page")
+    public Page<${className}> get${className}ForPage(@RequestBody PageBean pageBean) {
+        return ${className?uncap_first}Business.get${className}ForPage(pageBean);
+    }
+}

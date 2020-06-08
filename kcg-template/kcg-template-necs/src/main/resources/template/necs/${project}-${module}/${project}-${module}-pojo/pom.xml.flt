@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.oursdfl.${project}</groupId>
+		<artifactId>${project}</artifactId>
+        <version>${version}</version>
+		<relativePath>../../pom.xml</relativePath>
+	</parent>
+
+	<artifactId>${project}-${module}-pojo</artifactId>
+	<name>${project}-${module}-pojo</name>
+
+	<dependencies>
+		<dependency>
+            <groupId>com.oursdfl.framework</groupId>
+            <artifactId>fhafw-framework</artifactId>
+            <version>${fhafw_version}</version>
+            <optional>true</optional>
+        </dependency>
+		<dependency>
+			<groupId>com.oursdfl.framework</groupId>
+            <artifactId>fhafw-commons-core</artifactId>
+			<version>${fhafw_version}</version>
+			<optional>true</optional>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<optional>true</optional>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

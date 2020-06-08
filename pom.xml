@@ -1,0 +1,218 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.2.5.RELEASE</version>
+	</parent>
+
+	<groupId>com.kaadog</groupId>
+	<artifactId>kcg</artifactId>
+	<name>kcg</name>
+	<version>20200607.0.0.3-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+
+		<kcg.version>20200607.0.0.3-SNAPSHOT</kcg.version>
+
+		<commons-collections4.version>4.1</commons-collections4.version>
+		<commons-io.version>2.6</commons-io.version>
+		<commons-text.version>1.4</commons-text.version>
+		<logstash-logback-encoder.version>6.1</logstash-logback-encoder.version>
+		<hutool-all.version>5.3.5</hutool-all.version>
+
+		<!-- 数据库驱动 -->
+		<com.huawei.gauss.jdbc.ZenithDriver.version>GaussDB_100_1.0.1.SPC2.B002</com.huawei.gauss.jdbc.ZenithDriver.version>
+		<ojdbc7.version>12.1.0.1.0</ojdbc7.version>
+	</properties>
+
+	<modules>
+		<module>kcg-template</module>
+		<module>kcg-core</module>
+		<module>kcg-dashboard</module>
+	</modules>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-collections4</artifactId>
+			<version>${commons-collections4.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.logstash.logback</groupId>
+			<artifactId>logstash-logback-encoder</artifactId>
+			<version>${logstash-logback-encoder.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>cn.hutool</groupId>
+			<artifactId>hutool-all</artifactId>
+			<version>${hutool-all.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.freemarker</groupId>
+			<artifactId>freemarker</artifactId>
+		</dependency>
+	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.huawei.gauss</groupId>
+				<artifactId>com.huawei.gauss.jdbc.ZenithDriver</artifactId>
+				<version>${com.huawei.gauss.jdbc.ZenithDriver.version}</version>
+				<optional>true</optional>
+			</dependency>
+			<dependency>
+				<groupId>com.oracle</groupId>
+				<artifactId>ojdbc7</artifactId>
+				<version>${ojdbc7.version}</version>
+				<optional>true</optional>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-clean-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<configuration>
+					<!-- 指定配置文件编码 -->
+					<encoding>UTF-8</encoding>
+					<useDefaultDelimiters>true</useDefaultDelimiters>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<target>${java.version}</target>
+					<source>${java.version}</source>
+					<encoding>${project.build.sourceEncoding}</encoding>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<skipTests>true</skipTests>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-install-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>build-info</goal>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- 改变 child 模块的版本号 -->
+			<!-- 1、修改 version -->
+			<!-- 2、执行命令： mvn -N versions:update-child-modules 注意：如果一次无法全部修改完，可以执行多次 -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>versions-maven-plugin</artifactId>
+				<configuration>
+					<generateBackupPoms>false</generateBackupPoms>
+				</configuration>
+			</plugin>
+			<!-- 发布源代码 mvn source:jar deploy -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+		<resources>
+			<resource>
+				<directory>src/main/java</directory>
+				<filtering>true</filtering>
+				<includes>
+					<!--包含文件夹以及子文件夹下所有资源 -->
+					<include>**/*.*</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<!--包含文件夹以及子文件夹下所有资源 -->
+					<include>**/*.*</include>
+				</includes>
+			</resource>
+		</resources>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-assembly-plugin</artifactId>
+					<version>${maven-assembly-plugin.version}</version>
+					<executions>
+						<!-- 绑定到 package 生命周期阶段上 -->
+						<execution>
+							<id>make-assembly</id>
+							<phase>install</phase>
+							<goals>
+								<!-- 只运行一次 -->
+								<goal>single</goal>
+							</goals>
+						</execution>
+					</executions>
+					<configuration>
+						<finalName>${project.artifactId}</finalName>
+						<appendAssemblyId>false</appendAssemblyId>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+</project>

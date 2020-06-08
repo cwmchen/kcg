@@ -1,0 +1,49 @@
+package ${project}.${module}.business;
+
+import fhafw.commons.db.orm.hibernate.support.IHibernateTemplate;
+import fhafw.framework.business.IBaseBusiness;
+import fhafw.framework.mapping.Page;
+import fhafw.framework.mapping.PageBean;
+import ${project}.${module}.pojo.entity.${className};
+
+/**
+ * ${tableComment}业务接口
+ */
+public interface I${className}Business extends IBaseBusiness, IHibernateTemplate {
+
+    /**
+     * 移除主键对应的${tableComment}数据
+     * 
+    <#list columns as column>
+        <#list primaryKeys as primaryKey>
+            <#if primaryKey.columnName?lower_case == column.columnName?lower_case>
+     * @param ${column.fieldName} ${column.columnComment}
+            </#if>
+        </#list>
+    </#list>
+     * @return {@link ${className}}
+     */
+    public ${className} remove${className}(String <#list columns as column><#list primaryKeys as primaryKey><#if primaryKey.columnName?lower_case == column.columnName?lower_case>${column.fieldName}</#if></#list></#list>);
+
+    /**
+     * 获取主键对应的${tableComment}数据
+     * 
+     <#list columns as column>
+        <#list primaryKeys as primaryKey>
+            <#if primaryKey.columnName?lower_case == column.columnName?lower_case>
+     * @param ${column.fieldName} ${column.columnComment}
+            </#if>
+        </#list>
+    </#list>
+     * @return {@link ${className}}
+     */
+    public ${className} get${className}(String <#list columns as column><#list primaryKeys as primaryKey><#if primaryKey.columnName?lower_case == column.columnName?lower_case>${column.fieldName}</#if></#list></#list>);
+
+    /**
+     * ${tableComment}分页数据
+     * 
+     * @param pageBean 分页对象
+     * @return {@link Page} {@link ${className}}
+     */
+    public Page<${className}> get${className}ForPage(PageBean pageBean);
+}
