@@ -24,8 +24,14 @@ import org.apache.commons.lang3.StringUtils;
 
 public enum JdbcEnum {
 
+                      MYSQL("jdbc:mysql", "com.mysql.cj.jdbc.Driver"),
+                      ORACLE("jdbc:oracle", "oracle.jdbc.OracleDriver"),
+                      SQLSERVER("jdbc:microsoft", "com.microsoft.sqlserver.jdbc.SQLServerDriver"),
                       GAUSS100("jdbc:zenith", "com.huawei.gauss.jdbc.ZenithDriver"),
-                      MYSQL("jdbc:mysql", "com.mysql.cj.jdbc.Driver");
+                      DB2("jdbc:db2", "com.ibm.db2.jcc.DB2Driver"),
+                      POSTGRESQL("jdbc:postgresql", "org.postgresql.Driver"),
+                      SYBASE("jdbc:sybase", "com.sybase.jdbc.SybDriver"),
+                      INFORMIX("jdbc:informix-sqli", "com.informix.jdbc.IfxDriver");
 
     private String                             prefix;
     private String                             driverClassName;

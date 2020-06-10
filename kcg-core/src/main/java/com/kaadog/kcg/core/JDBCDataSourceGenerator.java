@@ -236,12 +236,14 @@ public class JDBCDataSourceGenerator implements IGenerator {
 
         dcs.forEach(dc -> {
             // 设置目录 TemplateLoader
-            stringTemplateLoader.putTemplate(templateContext.templateNameFormat(dc.getOriginalPath()), dc.getOriginalPath());
+            stringTemplateLoader.putTemplate(templateContext.templateNameFormat(dc.getOriginalPath()),
+                                             dc.getOriginalPath());
 
             // 设置文件目录 TemplateLoader
             List<FileConfiguration> fileConfigurations = dc.getFileConfigurations();
             fileConfigurations.forEach(fc -> {
-                stringTemplateLoader.putTemplate(templateContext.templateNameFormat(fc.getOriginalPath()), fc.getOriginalPath());
+                stringTemplateLoader.putTemplate(templateContext.templateNameFormat(fc.getOriginalPath()),
+                                                 fc.getOriginalPath());
             });
         });
 

@@ -4,13 +4,13 @@
 
 # 它能做什么
 
-​		支持 Mysql、Oracle、DB2、Microsoft SQL Server、GaussDB、PostgreSQL、MongoDB 数据仓储中的数据结构获取，依托于数据结构使用 freemarker 模板快速生成代码
+​		支持 Mysql、Oracle、Microsoft SQL Serve、GaussDBr、DB2、PostgreSQL、Sybase、Informix数据仓储中的数据结构获取，依托于数据结构使用 freemarker 模板快速生成代码
 
 ## 数据仓储支持情况
 
-| Mysql | Oracle | DB2    | Microsoft SQL Server | GaussDB | PostgreSQL | MongoDB |
-| ----- | ------ | ------ | -------------------- | ------- | ---------- | ------- |
-| 支持  | 适配中 | 计划中 | 支持                 | 支持    | 计划中     | 计划中  |
+| Mysql | Oracle | Microsoft SQL Server | GaussDB | DB2    | PostgreSQL | Sybase | Informix |
+| ----- | ------ | -------------------- | ------- | ------ | ---------- | ------ | -------- |
+| 支持  | 支持   | 支持                 | 支持    | 计划中 | 支持       | 计划中 | 支持     |
 
 # kcg 主要功能
 
@@ -180,3 +180,4 @@
 
 # 待处理问题
 
+- 数据库键数据需要获取

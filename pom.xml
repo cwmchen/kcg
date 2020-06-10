@@ -33,6 +33,10 @@
 		<!-- 数据库驱动 -->
 		<com.huawei.gauss.jdbc.ZenithDriver.version>GaussDB_100_1.0.1.SPC2.B002</com.huawei.gauss.jdbc.ZenithDriver.version>
 		<ojdbc7.version>12.1.0.1.0</ojdbc7.version>
+		<mssql-jdbc.version>8.2.2.jre8</mssql-jdbc.version>
+		<postgresql.version>42.2.13</postgresql.version>
+		<informix.jdbc>4.50.3</informix.jdbc>
+
 	</properties>
 
 	<modules>
@@ -82,15 +86,33 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
+				<groupId>com.oracle</groupId>
+				<artifactId>ojdbc7</artifactId>
+				<version>${ojdbc7.version}</version>
+				<optional>true</optional>
+			</dependency>
+			<dependency>
+				<groupId>com.microsoft.sqlserver</groupId>
+				<artifactId>mssql-jdbc</artifactId>
+				<version>${mssql-jdbc.version}</version>
+				<optional>true</optional>
+			</dependency>
+			<dependency>
 				<groupId>com.huawei.gauss</groupId>
 				<artifactId>com.huawei.gauss.jdbc.ZenithDriver</artifactId>
 				<version>${com.huawei.gauss.jdbc.ZenithDriver.version}</version>
 				<optional>true</optional>
 			</dependency>
 			<dependency>
-				<groupId>com.oracle</groupId>
-				<artifactId>ojdbc7</artifactId>
-				<version>${ojdbc7.version}</version>
+				<groupId>org.postgresql</groupId>
+				<artifactId>postgresql</artifactId>
+				<version>${postgresql.version}</version>
+				<optional>true</optional>
+			</dependency>
+			<dependency>
+				<groupId>com.ibm.informix</groupId>
+				<artifactId>jdbc</artifactId>
+				<version>${informix.jdbc}</version>
 				<optional>true</optional>
 			</dependency>
 		</dependencies>
