@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.kaadog.kcg.core.GeneratorContext.DirectoryConfiguration;
@@ -51,7 +52,7 @@ import cn.hutool.crypto.SecureUtil;
 public class TemplateContext {
 
     private TemplateConfiguration templateConfiguration;
-    
+
     /**
      * 模板名称格式化
      */
@@ -223,7 +224,9 @@ public class TemplateContext {
                     // 指定为特点目录时进行复制到工作空间中
                     pathTemplateFolder = templateFolder.substring(templateFolder.lastIndexOf("/") + 1);
                     finalTemplateFolder = getZipOrJarTemp();
-                    FileUtil.copy(templateFolder, finalTemplateFolder, true);
+
+                    FileUtil.copy(new File(FileUtil.getAbsolutePath(templateFolder)),
+                                  FileUtil.file(finalTemplateFolder), true);
                     // 复制目录时完整复制，需要更改最终地址
                     finalTemplateFolder = finalTemplateFolder + pathTemplateFolder;
                 }
@@ -233,6 +236,12 @@ public class TemplateContext {
             templateConfiguration.setFinalTemplateFolder(finalTemplateFolder);
             List<DirectoryConfiguration> list = new ArrayList<>();
             List<String> directoryPaths = FileUtil.getDirectoryPaths(finalTemplateFolder);
+
+            // 当不存在子目录时设置当前目录为模板存放目录
+            if (CollectionUtils.isEmpty(directoryPaths)) {
+                directoryPaths.add(finalTemplateFolder);
+            }
+
             directoryPaths.forEach(directoryPath -> {
 
                 DirectoryConfiguration directoryConfiguration = new DirectoryConfiguration();
