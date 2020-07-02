@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Configuration;
  * 生成器配置
  */
 @Configuration
-@ConfigurationProperties("kaadog.kcg")
+@ConfigurationProperties("kaadog.kcg.generator")
 public class GeneratorProperties extends com.kaadog.kcg.core.properties.GeneratorProperties {
 
 }

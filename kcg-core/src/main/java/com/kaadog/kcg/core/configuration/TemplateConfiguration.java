@@ -13,8 +13,8 @@ import lombok.Setter;
 @Setter
 public class TemplateConfiguration {
 
-    private static final String DEFAULT_TEMPLATE_FOLDER     = "../conf/template";
-    private static final String DEFAULT_WOKR_FOLDER         = "/kcg/";
+    private static final String DEFAULT_TEMPLATE_FOLDER = "../conf/template";
+    private static final String DEFAULT_WOKR_FOLDER     = "/kcg/";
 
     /**
      * 模板存放的，
@@ -30,36 +30,36 @@ public class TemplateConfiguration {
      * </ol>
      * 可以使用绝对路径、相对路径 ，默认值：{@link DEFAULT_TEMPLATE_FOLDER}
      */
-    private String              templateFolder              = DEFAULT_TEMPLATE_FOLDER;
+    private String              folderPath              = DEFAULT_TEMPLATE_FOLDER;
 
     /** 生成文件输出目录,默认值：用户目录 */
     private String              outRootFolder;
     /** 模板后缀，默认使用 .flt */
-    private String              templateFileSuffix          = ".flt";
+    private String              fileSuffix              = ".flt";
     /** 模板文件编码，默认使用 UTF-8 */
-    private String              templateFileEncoding        = "UTF-8";
+    private String              fileEncoding            = "UTF-8";
     /** 进行模板相关操作的工作文件夹 */
-    private String              wokrFolder                  = DEFAULT_WOKR_FOLDER;
+    private String              workFolder              = DEFAULT_WOKR_FOLDER;
     /** 解压后的临时模板文件夹保留的天数 */
-    private int                 tempTemplateFolderRetainDay = 1;
+    private int                 workFolderRetainDay     = 1;
 
     /** 如果是 jar、zip 时此路径会执行解压路径 */
-    private String              finalTemplateFolder         = templateFolder;
+    private String              finalFolderPath         = folderPath;
 
-    public String getTemplateFolder() {
-        if (StringUtils.isBlank(templateFolder)) {
+    public String getFolderPath() {
+        if (StringUtils.isBlank(folderPath)) {
             return DEFAULT_TEMPLATE_FOLDER;
         }
-        return templateFolder;
+        return folderPath;
     }
 
     @DeprecatedConfigurationProperty
-    public String getFinalTemplateFolder() {
-        return finalTemplateFolder;
+    public String getFinalFolderPath() {
+        return finalFolderPath;
     }
 
-    public void setTemplateFolder(String templateFolder) {
-        this.templateFolder = templateFolder;
-        setFinalTemplateFolder(this.templateFolder);
+    public void setFolderPath(String folderPath) {
+        this.folderPath = folderPath;
+        setFinalFolderPath(this.folderPath);
     }
 }

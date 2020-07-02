@@ -66,7 +66,7 @@ public class TemplateContext {
     public String getOutRootFolder() {
         // 不存在目录时使用用户目录
         if (StringUtils.isBlank(this.templateConfiguration.getOutRootFolder())) {
-            return FileUtil.normalize(FileUtil.getUserHomePath() + templateConfiguration.getWokrFolder());
+            return FileUtil.normalize(FileUtil.getUserHomePath() + templateConfiguration.getWorkFolder());
         }
         return FileUtil.normalize(this.templateConfiguration.getOutRootFolder());
     }
@@ -76,8 +76,8 @@ public class TemplateContext {
      */
     private String getZipOrJarTemp() {
 
-        String templateFolderSha256 = SecureUtil.sha256(getTemplateFolder());
-        String wokrFolder = FileUtil.normalize(FileUtil.getTmpDirPath() + templateConfiguration.getWokrFolder());
+        String folderPathSha256 = SecureUtil.sha256(getFolderPath());
+        String wokrFolder = FileUtil.normalize(FileUtil.getTmpDirPath() + templateConfiguration.getWorkFolder());
         FileUtil.mkdir(wokrFolder);
         File[] files = FileUtil.ls(wokrFolder);
         // 创建当前模板文件夹的索引号，保障不被别的线程替换调里面的内容
@@ -87,12 +87,12 @@ public class TemplateContext {
                 deleteExpiredFolders(file);
             }
 
-            if (file.isDirectory() && file.getName().endsWith(templateFolderSha256)) {
+            if (file.isDirectory() && file.getName().endsWith(folderPathSha256)) {
                 index = index + 1;
             }
         }
-        String dirPath = FileUtil.normalize(FileUtil.getTmpDirPath() + templateConfiguration.getWokrFolder() + index
-                                            + "_" + templateFolderSha256 + "/");
+        String dirPath = FileUtil.normalize(FileUtil.getTmpDirPath() + templateConfiguration.getWorkFolder() + index
+                                            + "_" + folderPathSha256 + "/");
         FileUtil.mkdir(dirPath);
         return dirPath;
     }
@@ -103,7 +103,7 @@ public class TemplateContext {
     private Boolean deleteExpiredFolders(File file) {
         Date date = FileUtil.lastModifiedTime(file);
         long day = DateUtil.between(date, DateUtil.date(), DateUnit.DAY, true);
-        if (day > templateConfiguration.getTempTemplateFolderRetainDay()) {
+        if (day > templateConfiguration.getWorkFolderRetainDay()) {
             return FileUtil.del(file);
         }
         return true;
@@ -112,19 +112,19 @@ public class TemplateContext {
     /**
      * 获取模板原始路径
      */
-    public String getTemplateFolder() {
-        String templateFolder = FileUtil.normalize(FileUtil.getAbsolutePath(templateConfiguration.getTemplateFolder()));
-        if (templateFolder.endsWith("/")) {
-            templateFolder = templateFolder.substring(0, templateFolder.length() - 2);
+    public String getFolderPath() {
+        String folderPath = FileUtil.normalize(FileUtil.getAbsolutePath(templateConfiguration.getFolderPath()));
+        if (folderPath.endsWith("/")) {
+            folderPath = folderPath.substring(0, folderPath.length() - 2);
         }
-        return templateFolder;
+        return folderPath;
     }
 
     /**
      * 获取模板最终路径
      */
-    public String getFinalTemplateFolder() {
-        return templateConfiguration.getFinalTemplateFolder();
+    public String getFinalFolderPath() {
+        return templateConfiguration.getFinalFolderPath();
     }
 
     /**
@@ -145,24 +145,23 @@ public class TemplateContext {
      */
     public List<DirectoryConfiguration> getDirectoryConfigurations() {
         try {
-            String templateFolder = getTemplateFolder();
-            String finalTemplateFolder = templateFolder;
+            String folderPath = getFolderPath();
+            String finalFolderPath = folderPath;
 
-            String fileEncoding = templateConfiguration.getTemplateFileEncoding();
+            String fileEncoding = templateConfiguration.getFileEncoding();
 
             // 当模板文件夹是 classpath 时
-            if (templateFolder.toLowerCase().startsWith(URLUtil.CLASSPATH_URL_PREFIX)) {
+            if (folderPath.toLowerCase().startsWith(URLUtil.CLASSPATH_URL_PREFIX)) {
                 // 获取 classpath 中指定的模板文件夹路径
-                String classPathTemplateFolder = FileUtil
-                        .normalize(StrUtil.removePrefixIgnoreCase(templateFolder, URLUtil.CLASSPATH_URL_PREFIX));
+                String classPathFolderPath = FileUtil
+                        .normalize(StrUtil.removePrefixIgnoreCase(folderPath, URLUtil.CLASSPATH_URL_PREFIX));
 
                 // 解压目录
                 String zipOrJarTemp = getZipOrJarTemp();
                 // 最终模板存放目录
-                finalTemplateFolder = FileUtil.normalize(zipOrJarTemp + classPathTemplateFolder);
+                finalFolderPath = FileUtil.normalize(zipOrJarTemp + classPathFolderPath);
 
-                List<URL> urls = Collections
-                        .list(this.getClass().getClassLoader().getResources(classPathTemplateFolder));
+                List<URL> urls = Collections.list(this.getClass().getClassLoader().getResources(classPathFolderPath));
 
                 for (URL url : urls) {
                     String absolutePath = FileUtil.getAbsolutePath(url.getPath());
@@ -173,22 +172,21 @@ public class TemplateContext {
                         ZipUtil.unzip(absolutePath.substring(0, index), zipOrJarTemp, Charset.forName(fileEncoding));
 
                     } else {
-                        String destPath = finalTemplateFolder
-                                .substring(0, FileUtil.lastIndexOfSeparator(finalTemplateFolder));
+                        String destPath = finalFolderPath.substring(0, FileUtil.lastIndexOfSeparator(finalFolderPath));
                         FileUtil.copy(absolutePath, destPath, true);
                     }
                 }
             } else {
                 String fileSuffix = FileUtil.JAR_PATH_EXT;
                 // 当模板文件是文件时，支持 jar、zip，此操作先解压在获取目录结构，并生成 DirectoryConfiguration 集合
-                int index = templateFolder.lastIndexOf(FileUtil.JAR_PATH_EXT);
+                int index = folderPath.lastIndexOf(FileUtil.JAR_PATH_EXT);
 
                 if (index == -1) {
-                    index = templateFolder.lastIndexOf(".zip!");
+                    index = folderPath.lastIndexOf(".zip!");
                     fileSuffix = ".zip!";
                 }
                 if (index == -1) {
-                    index = templateFolder.lastIndexOf(".gz!");
+                    index = folderPath.lastIndexOf(".gz!");
                     fileSuffix = ".gz!";
                 }
 
@@ -197,22 +195,22 @@ public class TemplateContext {
                     index = index + fileSuffix.length();
 
                     // 获取文件后对应的目录路径，如果不指定默认使用所以文件
-                    pathTemplateFolder = templateFolder.substring(index);
+                    pathTemplateFolder = folderPath.substring(index);
                     // 文件路径，去除 !xx/xx/xx 路径
-                    templateFolder = templateFolder.substring(0, index - 1);
+                    folderPath = folderPath.substring(0, index - 1);
                 }
 
-                if (FileUtil.isFile(templateFolder)) {
+                if (FileUtil.isFile(folderPath)) {
                     String outFileDir = getZipOrJarTemp();
-                    finalTemplateFolder = outFileDir + pathTemplateFolder;
+                    finalFolderPath = outFileDir + pathTemplateFolder;
 
-                    String extName = FileUtil.extName(templateFolder);
+                    String extName = FileUtil.extName(folderPath);
                     if (extName.equalsIgnoreCase("jar") || extName.equalsIgnoreCase("zip")) {
-                        ZipUtil.unzip(templateFolder, outFileDir, Charset.forName(fileEncoding));
+                        ZipUtil.unzip(folderPath, outFileDir, Charset.forName(fileEncoding));
                     } else if (extName.equalsIgnoreCase("gz")) {
                         // 先进行 gzip 解压为 zip 文件
-                        byte[] buf = ZipUtil.unGzip(FileUtil.getInputStream(templateFolder));
-                        String path = outFileDir + FileUtil.getName(templateFolder) + ".zip";
+                        byte[] buf = ZipUtil.unGzip(FileUtil.getInputStream(folderPath));
+                        String path = outFileDir + FileUtil.getName(folderPath) + ".zip";
                         FileUtil.writeBytes(buf, path);
                         // 然后解压 zip 文件
                         ZipUtil.unzip(path, outFileDir, Charset.forName(fileEncoding));
@@ -222,24 +220,23 @@ public class TemplateContext {
                     }
                 } else {
                     // 指定为特点目录时进行复制到工作空间中
-                    pathTemplateFolder = templateFolder.substring(templateFolder.lastIndexOf("/") + 1);
-                    finalTemplateFolder = getZipOrJarTemp();
+                    pathTemplateFolder = folderPath.substring(folderPath.lastIndexOf("/") + 1);
+                    finalFolderPath = getZipOrJarTemp();
 
-                    FileUtil.copy(new File(FileUtil.getAbsolutePath(templateFolder)),
-                                  FileUtil.file(finalTemplateFolder), true);
+                    FileUtil.copy(new File(FileUtil.getAbsolutePath(folderPath)), FileUtil.file(finalFolderPath), true);
                     // 复制目录时完整复制，需要更改最终地址
-                    finalTemplateFolder = finalTemplateFolder + pathTemplateFolder;
+                    finalFolderPath = finalFolderPath + pathTemplateFolder;
                 }
             }
 
             // 设置最终模板存放的文件夹
-            templateConfiguration.setFinalTemplateFolder(finalTemplateFolder);
+            templateConfiguration.setFinalFolderPath(finalFolderPath);
             List<DirectoryConfiguration> list = new ArrayList<>();
-            List<String> directoryPaths = FileUtil.getDirectoryPaths(finalTemplateFolder);
+            List<String> directoryPaths = FileUtil.getDirectoryPaths(finalFolderPath);
 
             // 当不存在子目录时设置当前目录为模板存放目录
             if (CollectionUtils.isEmpty(directoryPaths)) {
-                directoryPaths.add(finalTemplateFolder);
+                directoryPaths.add(finalFolderPath);
             }
 
             directoryPaths.forEach(directoryPath -> {

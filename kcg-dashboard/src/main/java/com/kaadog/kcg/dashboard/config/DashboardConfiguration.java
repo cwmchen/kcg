@@ -24,9 +24,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @Configuration
-@ConfigurationProperties("kaadog.kcg")
+@ConfigurationProperties("kaadog.kcg.dashboard")
 public class DashboardConfiguration {
 
+    public static final String DEFAULT_API_SERVER_PATH = "http://127.0.0.1:1666";
+
     /** 接口服务地址 */
-    private String apiServerPath;
+    private String             apiServerPath           = DEFAULT_API_SERVER_PATH;
 }

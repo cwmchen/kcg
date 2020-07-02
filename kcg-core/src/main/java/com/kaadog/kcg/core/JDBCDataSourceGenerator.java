@@ -99,17 +99,17 @@ public class JDBCDataSourceGenerator implements IGenerator {
             fcs.forEach(fc -> {
                 String fileName = fc.getFileName();
                 // 当前为模板文件时进行内容替换
-                if (fileName.endsWith(generatorProperties.getTemplate().getTemplateFileSuffix())) {
+                if (fileName.endsWith(generatorProperties.getTemplate().getFileSuffix())) {
                     try {
                         // 根据文件名称获取 Template
                         Template template = freemarkerConfiguration.getConfiguration().getTemplate(fileName);
 
                         String finalPath = fc.getFinalPath();
                         // 以后缀结尾的正则
-                        String regex = generatorProperties.getTemplate().getTemplateFileSuffix() + "$";
+                        String regex = generatorProperties.getTemplate().getFileSuffix() + "$";
                         // 替换后缀为空，比如说 User.java.flt 替换后变为 User.java
                         String filePath = Pattern.compile(regex).matcher(finalPath).replaceAll("");
-                        String templateFileEncoding = generatorProperties.getTemplate().getTemplateFileEncoding();
+                        String templateFileEncoding = generatorProperties.getTemplate().getFileEncoding();
                         Writer writer = new OutputStreamWriter(new FileOutputStream(filePath), templateFileEncoding);
                         template.process(fc.getData(), writer);
                         writer.close();
@@ -228,7 +228,7 @@ public class JDBCDataSourceGenerator implements IGenerator {
     private void createFreemarkerConfiguration() {
         freemarkerConfiguration = new FreemarkerConfiguration();
         freemarkerConfiguration.getConfiguration()
-                .setDefaultEncoding(generatorProperties.getTemplate().getTemplateFileEncoding());
+                .setDefaultEncoding(generatorProperties.getTemplate().getFileEncoding());
 
         StringTemplateLoader stringTemplateLoader = new StringTemplateLoader();
 
@@ -236,12 +236,14 @@ public class JDBCDataSourceGenerator implements IGenerator {
 
         dcs.forEach(dc -> {
             // 设置目录 TemplateLoader
-            stringTemplateLoader.putTemplate(templateContext.templateNameFormat(dc.getOriginalPath()), dc.getOriginalPath());
+            stringTemplateLoader.putTemplate(templateContext.templateNameFormat(dc.getOriginalPath()),
+                                             dc.getOriginalPath());
 
             // 设置文件目录 TemplateLoader
             List<FileConfiguration> fileConfigurations = dc.getFileConfigurations();
             fileConfigurations.forEach(fc -> {
-                stringTemplateLoader.putTemplate(templateContext.templateNameFormat(fc.getOriginalPath()), fc.getOriginalPath());
+                stringTemplateLoader.putTemplate(templateContext.templateNameFormat(fc.getOriginalPath()),
+                                                 fc.getOriginalPath());
             });
         });
 
@@ -250,7 +252,7 @@ public class JDBCDataSourceGenerator implements IGenerator {
         List<Map<String, Object>> dataMaps = generatorContext.getAvailableDataMaps();
 
         // 目标存放文件夹
-        String finalTemplateFolder = templateContext.getFinalTemplateFolder();
+        String finalFolderPath = templateContext.getFinalFolderPath();
         // 生成后输出到的目录
         String outRootFolder = templateContext.getOutRootFolder();
 
@@ -273,7 +275,7 @@ public class JDBCDataSourceGenerator implements IGenerator {
                     String fileOut = templateProcessForName(fc.getOriginalPath(), data);
                     String fileName = new File(fc.getOriginalPath()).getName();
                     // 目标存放文件夹
-                    String finalPath = FileUtil.replacePath(fileOut, finalTemplateFolder, outRootFolder);
+                    String finalPath = FileUtil.replacePath(fileOut, finalFolderPath, outRootFolder);
 
                     FileConfiguration fileConfiguration = new FileConfiguration();
                     fileConfiguration.setFileName(fileName);
@@ -287,7 +289,7 @@ public class JDBCDataSourceGenerator implements IGenerator {
                 // 使用数据替换后的路径
                 String directoryOut = templateProcessForName(dc.getOriginalPath(), data);
                 // 最终的路径
-                String finalPath = FileUtil.replacePath(directoryOut, finalTemplateFolder, outRootFolder);
+                String finalPath = FileUtil.replacePath(directoryOut, finalFolderPath, outRootFolder);
 
                 directoryConfiguration.setOriginalPath(dc.getOriginalPath());
                 directoryConfiguration.setFinalPath(finalPath);
@@ -324,7 +326,7 @@ public class JDBCDataSourceGenerator implements IGenerator {
     }
 
     public List<String> getDirectoryPaths() {
-        return FileUtil.getDirectoryPaths(generatorProperties.getTemplate().getTemplateFolder());
+        return FileUtil.getDirectoryPaths(generatorProperties.getTemplate().getFolderPath());
     }
 
     public GeneratorProperties getGeneratorProperties() {

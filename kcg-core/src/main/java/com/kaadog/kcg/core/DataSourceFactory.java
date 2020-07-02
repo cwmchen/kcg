@@ -37,6 +37,8 @@ import com.kaadog.kcg.core.enums.TableTypeEnum;
 import com.kaadog.kcg.core.exception.DataSourceFactoryException;
 import com.kaadog.kcg.core.function.TransformFunction;
 import com.kaadog.kcg.core.mapping.Column;
+import com.kaadog.kcg.core.mapping.ForeignKey;
+import com.kaadog.kcg.core.mapping.Index;
 import com.kaadog.kcg.core.mapping.PrimaryKey;
 import com.kaadog.kcg.core.mapping.Table;
 
@@ -147,8 +149,8 @@ public class DataSourceFactory {
 
                     while (tableResultSet.next()) {
                         TableTypeEnum tableType = TableTypeEnum.valueOf(tableResultSet.getString("TABLE_TYPE"));
-                        String remarks = StringUtils.isBlank(tableResultSet.getString("REMARKS")) ? "" : tableResultSet
-                                .getString("REMARKS");
+                        String remarks = tableResultSet.getString("REMARKS");
+                        remarks = StringUtils.isBlank(remarks) ? "" : remarks;
 
                         table.setCatalog(catalog);
                         table.setSchema(schema);
@@ -169,9 +171,23 @@ public class DataSourceFactory {
 
                         String columnName = columnResultSet.getString("COLUMN_NAME");
                         String dataType = columnResultSet.getString("TYPE_NAME");
-                        String columnComment = StringUtils.isBlank(columnResultSet
-                                .getString("REMARKS")) ? "" : columnResultSet.getString("REMARKS");
-                        String ordinalPosition = columnResultSet.getString("ORDINAL_POSITION");
+                        int columnSize = columnResultSet.getInt("COLUMN_SIZE");
+
+                        String _isNullable = columnResultSet.getString("IS_NULLABLE");
+                        Boolean isNullable = Boolean.TRUE;
+                        if (StringUtils.isNoneBlank(_isNullable)) {
+                            if ("no".equalsIgnoreCase(_isNullable)) {
+                                isNullable = Boolean.FALSE;
+                            }
+                        }
+
+                        String columnDef = columnResultSet.getString("COLUMN_DEF");
+                        columnDef = StringUtils.isBlank(columnDef) ? "" : columnDef;
+
+                        String remarks = columnResultSet.getString("REMARKS");
+                        remarks = StringUtils.isBlank(remarks) ? "" : remarks;
+
+                        int ordinalPosition = columnResultSet.getInt("ORDINAL_POSITION");
 
                         Column column = new Column();
                         column.setCatalog(catalog);
@@ -179,13 +195,48 @@ public class DataSourceFactory {
                         column.setTableName(tableName);
                         column.setColumnName(columnName);
                         column.setDataType(dataType);
+                        column.setColumnSize(columnSize);
+
+                        if (StringUtils.isNoneBlank(_isNullable)) {
+                            column.setIsNullable(isNullable);
+                        }
+
+                        column.setColumnDef(columnDef);
                         column.setOrdinalPosition(ordinalPosition);
-                        column.setColumnComment(columnComment);
+                        column.setColumnComment(remarks);
 
                         column.setFieldName(column.getColumnName());
                         column.setFieldType(getTypeMappingConfiguration(column.getDataType()));
 
                         table.addColumn(column);
+                    }
+
+                    ResultSet indexResultSet = databaseMetaData.getIndexInfo(catalog, schema, tableName, false, true);
+                    while (indexResultSet.next()) {
+
+                        Boolean nonUnique = indexResultSet.getBoolean("NON_UNIQUE");
+                        String indexQualifier = indexResultSet.getString("INDEX_QUALIFIER");
+                        String indexName = indexResultSet.getString("INDEX_NAME");
+                        short type = indexResultSet.getShort("TYPE");
+                        short ordinalPosition = indexResultSet.getShort("ORDINAL_POSITION");
+                        String columnName = indexResultSet.getString("COLUMN_NAME");
+                        String ascOrDesc = indexResultSet.getString("ASC_OR_DESC");
+                        String filterCondition = indexResultSet.getString("FILTER_CONDITION");
+
+                        Index index = new Index();
+                        index.setCatalog(catalog);
+                        index.setSchema(schema);
+                        index.setTableName(tableName);
+                        index.setNonUnique(nonUnique);
+                        index.setIndexQualifier(indexQualifier);
+                        index.setIndexName(indexName);
+                        index.setType(type);
+                        index.setOrdinalPosition(ordinalPosition);
+                        index.setColumnName(columnName);
+                        index.setAscOrDesc(ascOrDesc);
+                        index.setFilterCondition(filterCondition);
+
+                        table.addIndex(index);
                     }
 
                     ResultSet primaryKeyResultSet = databaseMetaData.getPrimaryKeys(catalog, schema, tableName);
@@ -202,6 +253,33 @@ public class DataSourceFactory {
                         primaryKey.setPkName(pkName);
 
                         table.addPrimaryKey(primaryKey);
+                    }
+
+                    ResultSet foreignKeyResultSet = databaseMetaData.getImportedKeys(catalog, schema, tableName);
+                    while (foreignKeyResultSet.next()) {
+
+                        String pkColumnName = foreignKeyResultSet.getString("PKCOLUMN_NAME");
+
+                        String fkCatalog = foreignKeyResultSet.getString("FKTABLE_CAT");
+                        String fkSchema = foreignKeyResultSet.getString("FKTABLE_SCHEM");
+                        String fkTableName = foreignKeyResultSet.getString("FKTABLE_NAME");
+                        String fkColumnName = foreignKeyResultSet.getString("FKCOLUMN_NAME");
+                        String fkName = foreignKeyResultSet.getString("FK_NAME");
+
+                        ForeignKey foreignKey = new ForeignKey();
+                        foreignKey.setPkCatalog(catalog);
+                        foreignKey.setPkSchema(schema);
+                        foreignKey.setPkTableName(tableName);
+                        foreignKey.setPkColumnName(pkColumnName);
+
+                        foreignKey.setFkCatalog(fkCatalog);
+                        foreignKey.setFkSchema(fkSchema);
+                        foreignKey.setFkTableName(fkTableName);
+                        foreignKey.setFkColumnName(fkColumnName);
+
+                        foreignKey.setFkName(fkName);
+
+                        table.addForeignKey(foreignKey);
                     }
 
                     tables.add(table);

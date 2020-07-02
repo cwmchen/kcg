@@ -37,11 +37,16 @@ public class Column implements Serializable {
     private String                   columnName       = "";
     /** 数据类型 */
     private String                   dataType         = "";
+    /** 列长度 */
+    private int                      columnSize;
+    /** 是否为空 */
+    private Boolean                  isNullable       = Boolean.TRUE;
+    /** 默认值 */
+    private String                   columnDef        = "";
     /** 顺序 */
-    private String                   ordinalPosition  = "";
+    private int                      ordinalPosition;
     /** 注释 */
     private String                   columnComment    = "";
-
     /** 字段名称 */
     private String                   fieldName        = "";
     /** 字段类型 */

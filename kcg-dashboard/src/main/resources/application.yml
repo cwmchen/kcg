@@ -25,30 +25,26 @@ spring:
       - org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfiguration
 kaadog:
   kcg:
-    api-server-path: http://127.0.0.1:${server.port}    project-version: 20200606.0.0.2-SNAPSHOT  # 项目版本号    project-name: necs
-    module-name: sys
-    template:
-      #template-folder: ../template
-      template-folder: classpath:template/necs
-      #template-folder: D:/git/kaadog/kcg/kcg-template/kcg-template-necs/src/main/resources/template/necs
-      #template-folder: D:/git/kaadog/kcg/kcg-core/target/kcg-core-202000602.0.0.2-SNAPSHOT.jar!template/necs
-      #template-folder: D:/git/kaadog/kcg/kcg-dashboard/target/kcg-dashboard.tar.gz!freemarker
-      #template-folder: D:/git/kaadog/kcg/kcg-dashboard/target/kcg-dashboard.zip!freemarker
-    properties:
-      "[fhafw_version]": "${fhafw.version}"       # 平台版本占位符
-      "[project_version]": "${project.version}"   # 项目版本占位符
-      "[moduleClassName]": "Sys"                  # 模块启动类名前缀
-    data-source-configurations:      - url: jdbc:zenith:@172.16.2.156:1888?useSSL=true
-        username: emergency
-        password: emergency_123
-        schema: EMERGENCY
-    dialect:
-      types:
-      - data-type: binary_integer
-        field-type: int
-      - data-type: binary_double
-        field-type: double
-      - data-type: binary_bigint
-        field-type: BigDecimal
-        class-name: java.math.BigDecimal
-        value: BigDecimal.valueOf(0)
+    dashboard:
+      api-server-path: http://127.0.0.1:${server.port}
+    generator:      project-version: 20200606.0.0.2-SNAPSHOT  # 项目版本号      project-name: necs
+      module-name: sys
+      template:
+        folder-path: classpath:template/necs
+      properties:
+        "[fhafw_version]": "${fhafw.version}"       # 平台版本占位符
+        "[project_version]": "${project.version}"   # 项目版本占位符
+        "[moduleClassName]": "Sys"                  # 模块启动类名前缀
+      data-source-configurations:        - url: jdbc:mysql://127.0.0.1:3306/demo?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=UTC
+          username: root
+          password: root
+      dialect:
+        types:
+        - data-type: binary_integer
+          field-type: int
+        - data-type: binary_double
+          field-type: double
+        - data-type: binary_bigint
+          field-type: BigDecimal
+          class-name: java.math.BigDecimal
+          value: BigDecimal.valueOf(0)

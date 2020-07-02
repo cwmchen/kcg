@@ -4,19 +4,19 @@
 
 # 它能做什么
 
-​		支持 Mysql、Oracle、DB2、Microsoft SQL Server、GaussDB、PostgreSQL、MongoDB 数据仓储中的数据结构获取，依托于数据结构使用 freemarker 模板快速生成代码
+​		支持 Mysql、Oracle、DB2、Microsoft SQL Server、GaussDB、PostgreSQL、MongoDB 数据中心的数据结构获取，依托于数据结构使用 freemarker 模板快速生成代码
 
-## 数据仓储支持情况
+## 数据中心支持情况
 
 | Mysql | Oracle | DB2    | Microsoft SQL Server | GaussDB | PostgreSQL | MongoDB |
 | ----- | ------ | ------ | -------------------- | ------- | ---------- | ------- |
-| 支持  | 适配中 | 计划中 | 支持                 | 支持    | 计划中     | 计划中  |
+| 支持  | 支持   | 计划中 | 支持                 | 支持    | 计划中     | 计划中  |
 
 # kcg 主要功能
 
 - 多数据源支持
 
-  可以指定多个不同数据仓储的数据源
+  可以指定多个不同数据中心的数据源
 
 - 多模板路径支持
 
@@ -38,7 +38,7 @@
 
 ## Step 1： 获取工具
 
-​		kcg 是一个 **spring boot** 项目，要求具备 **jdk1.8+** 环境。
+​		kcg 是一个 **spring boot** 项目，要求具备 **maven 3.5+、jdk1.8+** 环境。
 
 ### 方式一：
 
@@ -94,7 +94,13 @@
 
 # 相关配置
 
-配置采用 `kaadog.kcg` 前缀，主配置项说明：
+仪表盘配置采用 `kaadog.kcg.dashboard` 前缀，主配置项说明：
+
+| 参数            | 描述     | 默认值                |
+| :-------------- | :------- | :-------------------- |
+| api-server-path | 服务地址 | http://127.0.0.1:1666 |
+
+生成器配置采用 `kaadog.kcg.generator` 前缀，主配置项说明：
 
 | 参数            | 描述     | 默认值 |
 | :-------------- | :------- | :----- |
@@ -102,20 +108,20 @@
 | project-name    | 项目名称 | 无     |
 | module-name     | 模块名称 | 无     |
 
-​		`kaadog.kcg.template` 模板相关配置
+​		`kaadog.kcg.generator.template` 模板相关配置
 
-| 参数                            | 描述                                                         | 默认值               |
-| :------------------------------ | :----------------------------------------------------------- | :------------------- |
-| template-folder                 | 模板存放的文件夹，可以使用绝对路径、相对路径、classpath:、jar 文件、zip 文件、gz文件<br />1、绝对路径使用程序可以访问到的磁盘地址<br />2、相对路径一般使用../../ 的形式，相对的程序运行的目录<br />3、classpath: 程序可以访问到的类路径，如：`classpath:template` ，会获取到当前类路径可访问到的template内所有的文件夹与文件<br />4、jar 文件指定jar文件地址，可以使用  `!` 指定使用哪个文件夹作为模板文件夹，如：`xxx.jar!template`，获取当前  jar  中 `template`  文件夹中的模板<br />5、zip文件、gz 文件同 jar 文件处理一致 |                      |
-| out-root-folder                 | 生成文件输出目录（目录必须存在）                             | 用户目录+wokr-folder |
-| template-file-suffix            | 模板后缀，非此后缀不会进行模板读取，直接复制文件到输出目录   | .flt                 |
-| template-file-encoding          | 模板文件编码                                                 | UTF-8                |
-| wokr-folder                     | 进行模板相关操作的工作文件夹                                 | 用户目录+".kcg"      |
-| temp-template-folder-retain-day | 工作空间中生成的模板保留的天数                               | 1                    |
+| 参数                   | 描述                                                         | 默认值               |
+| :--------------------- | :----------------------------------------------------------- | :------------------- |
+| folder-path            | 模板存放的文件夹，可以使用绝对路径、相对路径、classpath:、jar 文件、zip 文件、gz文件<br />1、绝对路径使用程序可以访问到的磁盘地址<br />2、相对路径一般使用../../ 的形式，相对的程序运行的目录<br />3、classpath: 程序可以访问到的类路径，如：`classpath:template` ，会获取到当前类路径可访问到的template内所有的文件夹与文件<br />4、jar 文件指定jar文件地址，可以使用  `!` 指定使用哪个文件夹作为模板文件夹，如：`xxx.jar!template`，获取当前  jar  中 `template`  文件夹中的模板<br />5、zip文件、gz 文件同 jar 文件处理一致 |                      |
+| out-root-folder        | 生成文件输出目录（目录必须存在）                             | 用户目录+wokr-folder |
+| file-suffix            | 模板后缀，非此后缀不会进行模板读取，直接复制文件到输出目录   | .flt                 |
+| file-encoding          | 模板文件编码                                                 | UTF-8                |
+| work-folder            | 进行模板相关操作的工作文件夹                                 | 用户目录+".kcg"      |
+| work-folder-retain-day | 工作空间中生成的模板保留的天数                               | 1                    |
 
-​		`kaadog.kcg.properties`，自定义属性内容全局可使用，会传递调每一个模板中，使用 key=value 形式指定
+​		`kaadog.kcg.generator.properties`，自定义属性内容全局可使用，会传递调每一个模板中，使用 key=value 形式指定
 
-​		`kaadog.kcg.data-source-configurations`，数据源配置，可以指定多个数据源，配置项说明：
+​		`kaadog.kcg.generator.data-source-configurations`，数据源配置，可以指定多个数据源，配置项说明：
 
 | 参数        | 描述                                                         | 默认值      |
 | :---------- | :----------------------------------------------------------- | :---------- |
@@ -128,7 +134,7 @@
 | types       | 获取结构时可以获取的类型，支持 TABLE、VIEW                   | TABLE、VIEW |
 | table-names | 可以是表名也可以是视图名称，这些表或视图来自数据源配置，按照顺序加载，后加载的会覆盖之前加载的，如果不指定会默认生成所有 | 无          |
 
-​		`kaadog.kcg.transformFunction`，数据转换接口配置，可以指定开启的转换函数，并进行部分函数参数配置，配置项说明：
+​		`kaadog.kcg.generator.transformFunction`，数据转换接口配置，可以指定开启的转换函数，并进行部分函数参数配置，配置项说明：
 
 | 参数                                            | 描述                                                         | 默认值                          |
 | :---------------------------------------------- | :----------------------------------------------------------- | :------------------------------ |
@@ -141,7 +147,7 @@
 | gauss-db-comment-table-function.enabled         | GaussDB 表备注信息获取函数配置，前提条件是数据源配置使用了 gaussDB | true                            |
 | table-name-lower-case-table-function.enabled    | 表名称转换为小写函数配置                                     | true                            |
 
-​		`kaadog.kcg.dialect.types`， 方言配置，实现数据库字段类型与特点语言类型的映射关系，如果不指定数据库字段映射关系默认生成为 java String 类型（应为此工具使用 Java 开发），配置项说明：
+​		`kaadog.kcg.generator.dialect.types`， 方言配置，实现数据库字段类型与特点语言类型的映射关系，如果不指定数据库字段映射关系默认生成为 java String 类型（应为此工具使用 Java 开发），配置项说明：
 
 | 参数       | 描述                                                         | 默认值 |
 | :--------- | :----------------------------------------------------------- | :----- |
@@ -170,7 +176,7 @@
 
 # roadmap
 
-- 完善数据仓储适配
+- 完善数据中心适配
 - 开发 dashboard 仪表盘
   - 支持数据源手动维护
   - 支持动态选择要生成的表

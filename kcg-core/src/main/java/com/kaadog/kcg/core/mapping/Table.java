@@ -43,16 +43,30 @@ public class Table {
 
     /** 包含的列 */
     private List<Column>     columns      = new ArrayList<>();
+    /** 索引 */
+    private List<Index>      indexs       = new ArrayList<>(1);
     /** 包含的主键 */
     private List<PrimaryKey> primaryKeys  = new ArrayList<>(1);
+    /** 包含的外键 */
+    private List<ForeignKey> foreignKeys  = new ArrayList<>(1);
 
     public Table addColumn(Column column) {
         columns.add(column);
         return this;
     }
 
+    public Table addIndex(Index index) {
+        indexs.add(index);
+        return this;
+    }
+
     public Table addPrimaryKey(PrimaryKey primaryKey) {
         primaryKeys.add(primaryKey);
+        return this;
+    }
+
+    public Table addForeignKey(ForeignKey foreignKey) {
+        foreignKeys.add(foreignKey);
         return this;
     }
 
