@@ -44,9 +44,9 @@ public class Index implements Serializable {
     /** 索引名称 */
     private String            indexName        = "";
     /** 索引类型 */
-    private short             type;
+    private int               type;
     /** 顺序 */
-    private short             ordinalPosition;
+    private int               ordinalPosition;
     /** 列名 */
     private String            columnName       = "";
     /** 排序序列 */

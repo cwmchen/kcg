@@ -15,6 +15,7 @@
  */
 package com.kaadog.kcg.dashboard.config;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
@@ -28,7 +29,17 @@ import lombok.Setter;
 public class DashboardConfiguration {
 
     public static final String DEFAULT_API_SERVER_PATH = "http://127.0.0.1:1666";
+    public static final String DEFAULT_FILE_NAME       = "fileName";
 
+    /** 下载时生成的文件名称, 不需要后缀 */
+    private String             fileName                = DEFAULT_FILE_NAME;
     /** 接口服务地址 */
     private String             apiServerPath           = DEFAULT_API_SERVER_PATH;
+
+    public String getFileName() {
+        if (StringUtils.isBlank(fileName)) {
+            return DEFAULT_FILE_NAME;
+        }
+        return fileName;
+    }
 }

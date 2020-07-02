@@ -145,7 +145,7 @@ public class JDBCDataSourceGenerator implements IGenerator {
 
     private void buildDataSourceFactory() {
         dataSourceFactory.setDialectConfiguration(generatorProperties.getDialect());
-        dataSourceFactory.setDataSourceConfigurations(generatorProperties.getDataSourceConfigurations());
+        dataSourceFactory.setDataSourceConfigurations(generatorProperties.getDataSources());
 
         TransformFunctionConfiguration transformFunctionConfiguration = generatorProperties.getTransformFunction();
         if (transformFunctionConfiguration.getClassNameCamelCaseTableFunction().getEnabled()) {
@@ -182,9 +182,6 @@ public class JDBCDataSourceGenerator implements IGenerator {
 
         /** 全局数据 */
         Map<String, Object> globalData = new HashMap<>();
-        globalData.put("version", generatorProperties.getProjectVersion());
-        globalData.put("project", generatorProperties.getProjectName());
-        globalData.put("module", generatorProperties.getModuleName());
         globalData.putAll(generatorProperties.getProperties());
 
         /** 数据项 */

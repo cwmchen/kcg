@@ -26,7 +26,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kaadog.kcg.core.JDBCDataSourceGenerator;
 import com.kaadog.kcg.core.utils.FileUtil;
-import com.kaadog.kcg.dashboard.properties.GeneratorProperties;
+import com.kaadog.kcg.dashboard.config.DashboardConfiguration;
+import com.kaadog.kcg.dashboard.config.GeneratorConfiguration;
 
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.ZipUtil;
@@ -34,11 +35,14 @@ import cn.hutool.core.util.ZipUtil;
 @RestController
 public class GeneratorController {
 
-    public static final String  DEFAULT_G  = "/g";
-    public static final String  DEFAULT_GD = "/gd";
+    public static final String     DEFAULT_G  = "/g";
+    public static final String     DEFAULT_GD = "/gd";
 
     @Autowired
-    private GeneratorProperties generatorProperties;
+    private GeneratorConfiguration generatorConfiguration;
+
+    @Autowired
+    private DashboardConfiguration dashboardConfiguration;
 
     /**
      * 代码生成
@@ -48,7 +52,7 @@ public class GeneratorController {
      * @throws Throwable
      */
     private ResponseEntity<Object> generateCode(boolean out) throws Throwable {
-        JDBCDataSourceGenerator generator = new JDBCDataSourceGenerator(generatorProperties);
+        JDBCDataSourceGenerator generator = new JDBCDataSourceGenerator(generatorConfiguration);
 
         String path = generator.generate();
 
@@ -57,12 +61,11 @@ public class GeneratorController {
         }
 
         String zipTmpPath = FileUtil.normalize(FileUtil.getTmpDirPath() + "/" + UUID.fastUUID() + ".zip");
-        String fileName = generatorProperties.getProjectName() + ".zip";
-        String projectName = generatorProperties.getProjectName();
-        FileSystemResource file = new FileSystemResource(ZipUtil.zip(path + "/" + projectName, zipTmpPath));
+        String fileName = dashboardConfiguration.getFileName();
+        FileSystemResource file = new FileSystemResource(ZipUtil.zip(path + "/" + fileName, zipTmpPath));
         HttpHeaders headers = new HttpHeaders();
         headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
-        headers.add("Content-Disposition", String.format("attachment; filename=\"%s\"", fileName));
+        headers.add("Content-Disposition", String.format("attachment; filename=\"%s\"", fileName + ".zip"));
         headers.add("Pragma", "no-cache");
         headers.add("Expires", "0");
 

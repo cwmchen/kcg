@@ -13,16 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kaadog.kcg.dashboard.properties;
+package com.kaadog.kcg.dashboard.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+
+import com.kaadog.kcg.core.properties.GeneratorProperties;
 
 /**
  * 生成器配置
  */
 @Configuration
 @ConfigurationProperties("kaadog.kcg.generator")
-public class GeneratorProperties extends com.kaadog.kcg.core.properties.GeneratorProperties {
+public class GeneratorConfiguration extends GeneratorProperties {
 
 }

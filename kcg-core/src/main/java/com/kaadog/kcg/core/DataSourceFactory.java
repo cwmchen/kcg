@@ -217,8 +217,8 @@ public class DataSourceFactory {
                         Boolean nonUnique = indexResultSet.getBoolean("NON_UNIQUE");
                         String indexQualifier = indexResultSet.getString("INDEX_QUALIFIER");
                         String indexName = indexResultSet.getString("INDEX_NAME");
-                        short type = indexResultSet.getShort("TYPE");
-                        short ordinalPosition = indexResultSet.getShort("ORDINAL_POSITION");
+                        int type = indexResultSet.getInt("TYPE");
+                        int ordinalPosition = indexResultSet.getInt("ORDINAL_POSITION");
                         String columnName = indexResultSet.getString("COLUMN_NAME");
                         String ascOrDesc = indexResultSet.getString("ASC_OR_DESC");
                         String filterCondition = indexResultSet.getString("FILTER_CONDITION");

@@ -34,20 +34,14 @@ import lombok.Setter;
 @Setter
 public class GeneratorProperties {
 
-    /** 项目版本，数据标量为 version */
-    private String                         projectVersion;
-    /** 项目名称，数据标量为：project */
-    private String                         projectName;
-    /** 模块名称，数据标量为：module */
-    private String                         moduleName;
     /** 模板配置 */
     private TemplateConfiguration          template;
 
     /** 自定义属性内容全局可使用 */
     private Map<String, String>            properties        = new HashMap<>();
 
-    /** 数据源配置，可以指定多个数据源 */
-    private List<DataSourceConfiguration>  dataSourceConfigurations;
+    /** 数据源配置, 可以指定多个数据源 */
+    private List<DataSourceConfiguration>  dataSources;
 
     /** 数据转换接口配置 */
     private TransformFunctionConfiguration transformFunction = new TransformFunctionConfiguration();
