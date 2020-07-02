@@ -4,14 +4,13 @@
 
 # 它能做什么
 
-​		支持 Mysql、Oracle、DB2、Microsoft SQL Server、GaussDB、PostgreSQL、MongoDB 数据中心的数据结构获取，依托于数据结构使用 freemarker 模板快速生成代码
+​		支持 Mysql、Oracle、DB2、Microsoft SQL Server、GaussDB、PostgreSQL数据中心的数据结构获取，依托于数据结构使用 freemarker 模板快速生成代码
 
 ## 数据中心支持情况
 
-| Mysql | Oracle | DB2    | Microsoft SQL Server | GaussDB | PostgreSQL | MongoDB |
-| ----- | ------ | ------ | -------------------- | ------- | ---------- | ------- |
-| 支持  | 支持   | 计划中 | 支持                 | 支持    | 计划中     | 计划中  |
-
+| Mysql | Oracle | DB2    | Microsoft SQL Server | GaussDB | PostgreSQL |
+| ----- | ------ | ------ | -------------------- | ------- | ---------- |
+| 支持  | 支持   | 计划中 | 支持                 | 支持    | 计划中     |
 # kcg 主要功能
 
 - 多数据源支持
@@ -156,7 +155,7 @@
 | class-name | 字段类型所使用的类名，如果指定会进行 import（非内置类型需要指定） | 无     |
 | value      | 默认值                                                       | 无     |
 
-​		`kaadog.kcg.dialect.types` 默认值优先级最低，可以进行配置替换，如下为默认值：
+​		`kaadog.kcg.generator.dialect.types` 默认值优先级最低，可以进行配置替换，如下为默认值：
 
 | data-type | field-type    | class-name              | value               |
 | --------- | ------------- | ----------------------- | ------------------- |
@@ -185,4 +184,6 @@
   - 支持可以在线编辑模板功能
 
 # 待处理问题
+
+- 数据库键数据需要获取
 

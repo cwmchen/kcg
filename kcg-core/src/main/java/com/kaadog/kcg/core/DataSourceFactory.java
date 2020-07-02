@@ -86,8 +86,8 @@ public class DataSourceFactory {
         log.info("成功加载数据库驱动 {}", dataSourceConfiguration.getDriverClassName());
 
         Properties properties = new Properties();
-        properties.put("remarksReporting", true);
-        properties.put("remarks", true);
+        properties.put("remarksReporting", "true");
+        properties.put("remarks", "true");
         properties.put("useInformationSchema", "true");
         properties.put("user", dataSourceConfiguration.getUsername());
         properties.put("password", dataSourceConfiguration.getPassword());
