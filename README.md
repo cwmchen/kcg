@@ -67,7 +67,7 @@
 
 ​	kcg 内置模板本身内置丰富的模板，可以使用内置模板，也可以通过使用内置模板修改为自己的业务模板（建议），如果有能力也可以自定义业务模板，模板语法参考[FreeMarker 在线手册](http://freemarker.foofun.cn/) 。
 
-> 模板编辑完成后需要放置在配置项 `kaadog.kcg.template.template-folder` 对应的路径下
+> 模板编辑完成后需要放置在配置项 `kaadog.kcg.generator.template.folder-path` 对应的路径下
 
 
 
