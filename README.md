@@ -93,6 +93,14 @@
 
 # 相关配置
 
+配置使用yaml进行配置，形式如：
+
+```yaml
+kaadog:
+  kcg:
+    key: value
+```
+
 仪表盘配置采用 `kaadog.kcg.dashboard` 前缀，主配置项说明：
 
 | 参数            | 描述                             | 默认值                |
@@ -175,9 +183,6 @@
 ```yaml
 kaadog:
   kcg:
-    dashboard:
-      api-server-path: http://127.0.0.1:${server.port}
-      file-name: necs
     generator:
       template:
         folder-path: classpath:template/db-structure
