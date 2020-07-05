@@ -27,6 +27,14 @@ kaadog:
   kcg:
     dashboard:
       api-server-path: http://127.0.0.1:${server.port}
+      cors-registrations:        - path-pattern: "/**"
+          allowed-origins:
+           - "*"
+          allowed-headers:
+           - "*"
+          exposed-headers:
+           - "Access-Control-Allow-Origin"
+          max-age: 10
     generator:
       template:
         folder-path: classpath:template
