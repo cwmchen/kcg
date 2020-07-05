@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>com.kaadog</groupId>
 		<artifactId>kcg</artifactId>
-		<version>20200607.0.0.3-SNAPSHOT</version>
+		<version>20200705.0.0.4-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
@@ -122,17 +122,22 @@
 			<groupId>com.ibm.informix</groupId>
 			<artifactId>jdbc</artifactId>
 		</dependency>
-
-		<dependency>
-			<groupId>com.kaadog</groupId>
-			<artifactId>kcg-template-necs</artifactId>
-			<version>${kcg.version}</version>
-		</dependency>
 		<dependency>
 			<groupId>com.kaadog</groupId>
 			<artifactId>kcg-core</artifactId>
 			<version>${kcg.version}</version>
 		</dependency>
+
+        <dependency>
+            <groupId>com.kaadog</groupId>
+            <artifactId>kcg-template-necs</artifactId>
+            <version>${kcg.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.kaadog</groupId>
+            <artifactId>kcg-template-db-structure</artifactId>
+            <version>${kcg.version}</version>
+        </dependency>
 	</dependencies>
 
 	<build>

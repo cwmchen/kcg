@@ -12,9 +12,10 @@
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>kcg-template-necs</artifactId>
-	<name>kcg-template-necs</name>
+	<artifactId>kcg-template-db-structure</artifactId>
+	<name>kcg-template-db-structure</name>
 	<packaging>jar</packaging>
+	<description>用于生成数据中心结构</description>
 
 	<build>
 		<plugins>

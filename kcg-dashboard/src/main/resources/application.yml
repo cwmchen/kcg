@@ -30,7 +30,7 @@ kaadog:
       file-name: necs
     generator:
       template:
-        folder-path: classpath:template/necs
+        folder-path: classpath:template/db-structure
       properties:
         "[project]": "necs"                           # 项目名称
         "[module]": "sys"                             # 模块名称

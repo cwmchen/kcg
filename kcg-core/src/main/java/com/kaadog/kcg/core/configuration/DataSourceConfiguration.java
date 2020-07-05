@@ -15,6 +15,7 @@
  */
 package com.kaadog.kcg.core.configuration;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -31,21 +32,23 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class DataSourceConfiguration {
+public class DataSourceConfiguration implements Serializable {
 
-    private String              url;
-    private String              username;
-    private String              password;
-    private String              driverClassName;
+    private static final long   serialVersionUID = -148865085058753670L;
 
-    private String              catalog    = null;
-    private String              schema     = null;
+    private String              url              = "";
+    private String              username         = "";
+    private String              password         = "";
+    private String              driverClassName  = "";
+
+    private String              catalog          = "";
+    private String              schema           = "";
 
     /** 自定义属性内容 */
-    private Map<String, String> properties = new HashMap<>();
+    private Map<String, String> properties       = new HashMap<>();
 
-    private List<TableTypeEnum> types      = Arrays.asList(TableTypeEnum.values());
+    private List<TableTypeEnum> types            = Arrays.asList(TableTypeEnum.values());
 
     /** 可以是表名也可以是视图名称，这些表或视图来自数据源配置，按照顺序加载，后加载的会覆盖之前加载的，如果不指定会默认生成所有 */
-    private List<String>        tableNames = new ArrayList<>(1);
+    private List<String>        tableNames       = new ArrayList<>(1);
 }

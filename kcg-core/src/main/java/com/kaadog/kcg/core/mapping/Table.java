@@ -15,6 +15,7 @@
  */
 package com.kaadog.kcg.core.mapping;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,27 +29,29 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Table {
+public class Table implements Serializable {
 
-    private String           catalog      = "";
-    private String           schema       = "";
+    private static final long serialVersionUID = -7342856478709410269L;
+
+    private String            catalog          = "";
+    private String            schema           = "";
 
     /** table,view */
-    private TableTypeEnum    tableType    = TableTypeEnum.TABLE;
-    private String           tableName    = "";
-    private String           tableComment = "";
+    private TableTypeEnum     tableType        = TableTypeEnum.TABLE;
+    private String            tableName        = "";
+    private String            tableComment     = "";
 
     /** 生成类名称 */
-    private String           className    = "";
+    private String            className        = "";
 
     /** 包含的列 */
-    private List<Column>     columns      = new ArrayList<>();
+    private List<Column>      columns          = new ArrayList<>();
     /** 索引 */
-    private List<Index>      indexs       = new ArrayList<>(1);
+    private List<Index>       indexs           = new ArrayList<>(1);
     /** 包含的主键 */
-    private List<PrimaryKey> primaryKeys  = new ArrayList<>(1);
+    private List<PrimaryKey>  primaryKeys      = new ArrayList<>(1);
     /** 包含的外键 */
-    private List<ForeignKey> foreignKeys  = new ArrayList<>(1);
+    private List<ForeignKey>  foreignKeys      = new ArrayList<>(1);
 
     public Table addColumn(Column column) {
         columns.add(column);

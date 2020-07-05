@@ -117,9 +117,22 @@ public class DataSourceFactory {
                 if (StringUtils.isBlank(catalog)) {
                     catalog = connection.getCatalog();
                 }
+                if (StringUtils.isBlank(catalog)) {
+                    catalog = "";
+                    dsc.setCatalog("");
+                } else {
+                    dsc.setCatalog(catalog);
+                }
+
                 // 从连接对象获取 schema
                 if (StringUtils.isBlank(schema)) {
                     schema = connection.getSchema();
+                }
+                if (StringUtils.isBlank(schema)) {
+                    schema = "";
+                    dsc.setSchema("");
+                } else {
+                    dsc.setSchema(schema);
                 }
 
                 // 未指定加载表名称时获取所有的表名称
@@ -172,6 +185,8 @@ public class DataSourceFactory {
                         String columnName = columnResultSet.getString("COLUMN_NAME");
                         String dataType = columnResultSet.getString("TYPE_NAME");
                         int columnSize = columnResultSet.getInt("COLUMN_SIZE");
+                        int decimalDigits = columnResultSet.getInt("DECIMAL_DIGITS");
+                        int numPrecRadix = columnResultSet.getInt("NUM_PREC_RADIX");
 
                         String _isNullable = columnResultSet.getString("IS_NULLABLE");
                         Boolean isNullable = Boolean.TRUE;
@@ -196,6 +211,8 @@ public class DataSourceFactory {
                         column.setColumnName(columnName);
                         column.setDataType(dataType);
                         column.setColumnSize(columnSize);
+                        column.setDecimalDigits(decimalDigits);
+                        column.setNumPrecRadix(numPrecRadix);
 
                         if (StringUtils.isNoneBlank(_isNullable)) {
                             column.setIsNullable(isNullable);

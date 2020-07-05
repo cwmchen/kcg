@@ -28,10 +28,10 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Getter
-@Setter
 public class GeneratorContext {
 
     /** 目录配置数据同时包含文件配置数据 */
+    @Setter
     private List<DirectoryConfiguration> directoryConfigurations = new ArrayList<>();
 
     /** 全局数据，会附加到 dataMaps 中每一个 Map 对象中，如果 Map 中存在不进行覆盖 */
@@ -40,12 +40,27 @@ public class GeneratorContext {
     private List<Map<String, Object>>    dataMaps                = new ArrayList<>();
 
     public GeneratorContext addDirectoryConfiguration(DirectoryConfiguration directoryConfiguration) {
-        directoryConfigurations.add(directoryConfiguration);
+        this.directoryConfigurations.add(directoryConfiguration);
+        return this;
+    }
+
+    public GeneratorContext addDirectoryConfigurations(List<DirectoryConfiguration> directoryConfigurations) {
+        this.directoryConfigurations.addAll(directoryConfigurations);
+        return this;
+    }
+
+    public GeneratorContext putGlobalData(Map<String, Object> data) {
+        this.globalData.putAll(data);
         return this;
     }
 
     public GeneratorContext putData(Map<String, Object> data) {
-        dataMaps.add(data);
+        this.dataMaps.add(data);
+        return this;
+    }
+
+    public GeneratorContext putDatas(List<Map<String, Object>> datas) {
+        this.dataMaps.addAll(datas);
         return this;
     }
 

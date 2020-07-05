@@ -4,13 +4,13 @@
 
 # 它能做什么
 
-​		支持 Mysql、Oracle、DB2、Microsoft SQL Server、GaussDB、PostgreSQL数据中心的数据结构获取，依托于数据结构使用 freemarker 模板快速生成代码
+​		支持 Mysql、Oracle、DB2、Microsoft SQL Server、GaussDB、openGauss、PostgreSQL数据中心的数据结构获取，依托于数据结构使用 freemarker 模板快速生成代码
 
 ## 数据中心支持情况
 
-| Mysql | Oracle | DB2    | Microsoft SQL Server | GaussDB | PostgreSQL |
-| ----- | ------ | ------ | -------------------- | ------- | ---------- |
-| 支持  | 支持   | 计划中 | 支持                 | 支持    | 计划中     |
+| Mysql | Oracle | DB2    | Microsoft SQL Server | GaussDB | openGauss | PostgreSQL |
+| ----- | ------ | ------ | -------------------- | ------- | --------- | ---------- |
+| 支持  | 支持   | 计划中 | 支持                 | 支持    | 支持      | 计划中     |
 # kcg 主要功能
 
 - 多数据源支持
@@ -168,6 +168,24 @@
 | longtext  | String        |                         |                     |
 | timestamp | LocalDateTime | java.time.LocalDateTime | LocalDateTime.now() |
 
+# 内置模板
+
+​	内置模板使用 `kaadog.kcg.generator.template.folder-path` 按照 `classpath` 形式指定，如：
+
+```yaml
+kaadog:
+  kcg:
+    dashboard:
+      api-server-path: http://127.0.0.1:${server.port}
+      file-name: necs
+    generator:
+      template:
+        folder-path: classpath:template/db-structure
+```
+
+1. kcg-template-db-structure：用于生成数据中心结构
+2. kcg-template-necs：用于生成 spring cloud 工程模块
+
 # roadmap
 
 - 完善数据中心适配
@@ -176,5 +194,3 @@
   - 支持动态选择要生成的表
   - 支持可以上传模板文件
   - 支持自定义表结构
-  - 支持可以在线编辑模板功能
-

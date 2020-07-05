@@ -14,7 +14,7 @@
 	<groupId>com.kaadog</groupId>
 	<artifactId>kcg</artifactId>
 	<name>kcg</name>
-	<version>20200607.0.0.3-SNAPSHOT</version>
+	<version>20200705.0.0.4-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<properties>
@@ -22,7 +22,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
 
-		<kcg.version>20200607.0.0.3-SNAPSHOT</kcg.version>
+		<kcg.version>20200705.0.0.4-SNAPSHOT</kcg.version>
 
 		<commons-collections4.version>4.1</commons-collections4.version>
 		<commons-io.version>2.6</commons-io.version>

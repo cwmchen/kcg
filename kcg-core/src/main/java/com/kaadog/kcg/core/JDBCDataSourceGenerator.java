@@ -33,6 +33,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.kaadog.kcg.core.GeneratorContext.DirectoryConfiguration;
 import com.kaadog.kcg.core.GeneratorContext.FileConfiguration;
+import com.kaadog.kcg.core.configuration.DataSourceConfiguration;
 import com.kaadog.kcg.core.configuration.TransformFunctionConfiguration;
 import com.kaadog.kcg.core.configuration.TransformFunctionConfiguration.ClassNameCamelCaseTableFunctionConfiguration;
 import com.kaadog.kcg.core.function.ClassNameCamelCaseTableFunction;
@@ -110,10 +111,10 @@ public class JDBCDataSourceGenerator implements IGenerator {
                         // 替换后缀为空，比如说 User.java.flt 替换后变为 User.java
                         String filePath = Pattern.compile(regex).matcher(finalPath).replaceAll("");
                         String templateFileEncoding = generatorProperties.getTemplate().getFileEncoding();
+                        // 判断是否存在将要生成的文件
                         Writer writer = new OutputStreamWriter(new FileOutputStream(filePath), templateFileEncoding);
                         template.process(fc.getData(), writer);
                         writer.close();
-
                     } catch (TemplateException | IOException e) {
                         exceptions.add(e);
                         log.error("模板名称为：" + fileName + " 执行内容替换失败", e);
@@ -175,19 +176,55 @@ public class JDBCDataSourceGenerator implements IGenerator {
         }
     }
 
+    /**
+     * 构建 {@link GeneratorContext} 内容
+     * <p>
+     * dataSources 数据
+     * <ol>
+     * <li>dataSources: 所有数据源信息 {@link DataSourceConfiguration}</li>
+     * </ol>
+     * <p>
+     * <p>
+     * tables 数据
+     * <ol>
+     * <li>tables: 所有的表数据{@link Table}</li>
+     * </ol>
+     * <p>
+     * 每一个 table 包含的数据 key
+     * <ol>
+     * <li>catalog: 数据库 catalog</li>
+     * <li>schema: 数据库 schema</li>
+     * <li>tableType: 表类型</li>
+     * <li>tableName: 表名称</li>
+     * <li>tableComment: 表注释类型</li>
+     * <li>className: 生成的类名</li>
+     * <li>columns: 表包含的列集合</li>
+     * <li>indexs: 表包含的索引集合</li>
+     * <li>primaryKeys: 表包含的主键集合</li>
+     * <li>foreignKeys: 表包含的外键集合</li>
+     * <li>imports: 需要导入的依赖集合</li>
+     * </ol>
+     */
     private void buildGeneratorContext() {
-        generatorContext.setDirectoryConfigurations(templateContext.getDirectoryConfigurations());
+        generatorContext.addDirectoryConfigurations(templateContext.getDirectoryConfigurations());
 
         List<Table> tables = dataSourceFactory.getTables();
 
-        /** 全局数据 */
+        // 全局数据
         Map<String, Object> globalData = new HashMap<>();
         globalData.putAll(generatorProperties.getProperties());
 
-        /** 数据项 */
+        // 数据项
         List<Map<String, Object>> dataMaps = new ArrayList<>();
+
         tables.forEach(table -> {
             Map<String, Object> data = new HashMap<>();
+
+            // 所有数据源配置信息
+            data.put("dataSources", dataSourceFactory.getDataSourceConfigurations());
+            // 所有的表数据
+            data.put("tables", tables);
+
             data.put("catalog", table.getCatalog());
             data.put("schema", table.getSchema());
             data.put("tableType", table.getTableType().name());
@@ -196,7 +233,9 @@ public class JDBCDataSourceGenerator implements IGenerator {
             data.put("className", table.getClassName());
 
             data.put("columns", table.getColumns());
+            data.put("indexs", table.getColumns());
             data.put("primaryKeys", table.getPrimaryKeys());
+            data.put("foreignKeys", table.getForeignKeys());
 
             Set<String> imports = table.getColumns().stream().filter(column -> {
                 return StringUtils.isNoneBlank(column.getFieldType().getClassName());
@@ -208,8 +247,8 @@ public class JDBCDataSourceGenerator implements IGenerator {
             dataMaps.add(data);
         });
 
-        generatorContext.setGlobalData(globalData);
-        generatorContext.setDataMaps(dataMaps);
+        generatorContext.putGlobalData(globalData);
+        generatorContext.putDatas(dataMaps);
     }
 
     /**

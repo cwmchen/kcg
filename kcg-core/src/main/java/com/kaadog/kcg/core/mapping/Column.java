@@ -39,6 +39,10 @@ public class Column implements Serializable {
     private String                   dataType         = "";
     /** 列长度 */
     private int                      columnSize;
+    /** 列的小数位数 */
+    private int                      decimalDigits;
+    /** 列的基数 */
+    private int                      numPrecRadix;
     /** 是否为空 */
     private Boolean                  isNullable       = Boolean.TRUE;
     /** 默认值 */

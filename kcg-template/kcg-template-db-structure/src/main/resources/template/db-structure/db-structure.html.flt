@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<title>数据库表结构</title>
+<style type="text/css">
+table.tableShow {
+	color: #666;
+	border: 1px solid #cad9ea;
+	table-layout: automatic;
+	empty-cells: show;
+	border-collapse: collapse;
+	margin: 0 auto;
+	cursor: default;
+}
+
+table.tableShow th {
+	font-weight: bold;
+	color: #4D647C;
+	background: #E5EDF9;
+	height: 30px;
+	word-break: keep-all;
+	white-space: nowrap;
+	border: 1px solid #cad9ea;
+	padding: 0 1em 0;
+}
+
+table.tableShow td {
+	height: 25px;
+	border: 1px solid #cad9ea;
+	padding: 0 1em 0;
+}
+
+table.tableShow tr:hover {
+	background: #FFFF99;
+}
+
+.primarykey {
+	color: red;
+	font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+	<table id="all" class="tableShow">
+	    <#list dataSources as dataSource>
+		  <#list tables as table>
+		      <#if (table.catalog == dataSource.catalog && table.schema == dataSource.schema)>
+		<tr>
+			<th colspan="7" class="tableRow">${dataSource.catalog}<#if (table.catalog != "" && dataSource.schema != "")> / ${table.schema}/<#else> / </#if>${table.tableName}</th>
+		</tr>
+		<tr class="tableTitle">
+			<th>序号</th>
+			<th>字段名</th>
+			<th>类型</th>
+            <th>长度</th>
+			<th>是否允许为空</th>
+			<th>默认值</th>
+			<th>说明</th>
+		</tr>
+		        <#list table.columns as column>
+        <tr>
+            <td>${column?counter}</td>
+            <td>${column.columnName}</td>
+            <td>${column.dataType}</td>
+            <td><#if column.decimalDigits == 0>${column.columnSize}<#else>(${column.columnSize},${column.decimalDigits})</#if></td>
+            <td>${column.isNullable?string('yes', 'no')}</td>
+            <td>${column.columnDef}</td>
+            <td>${column.columnComment}</td>
+        </tr>
+	            </#list>
+	         </#if>
+	      </#list>
+        </#list>
+	</table>
+</body>
+</html>
