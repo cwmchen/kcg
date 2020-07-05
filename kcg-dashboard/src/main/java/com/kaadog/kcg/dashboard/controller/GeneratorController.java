@@ -62,7 +62,7 @@ public class GeneratorController {
 
         String zipTmpPath = FileUtil.normalize(FileUtil.getTmpDirPath() + "/" + UUID.fastUUID() + ".zip");
         String fileName = dashboardConfiguration.getFileName();
-        FileSystemResource file = new FileSystemResource(ZipUtil.zip(path + "/" + fileName, zipTmpPath));
+        FileSystemResource file = new FileSystemResource(ZipUtil.zip(path, zipTmpPath));
         HttpHeaders headers = new HttpHeaders();
         headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
         headers.add("Content-Disposition", String.format("attachment; filename=\"%s\"", fileName + ".zip"));

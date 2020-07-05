@@ -127,7 +127,7 @@ public class JDBCDataSourceGenerator implements IGenerator {
             });
         });
 
-        String path = templateContext.getOutRootFolder();
+        String path = templateContext.getFinalOutRootFolder();
         log.info("生成文件成功，可以通过 [{}] 获取", path);
         return path;
     }
@@ -288,9 +288,9 @@ public class JDBCDataSourceGenerator implements IGenerator {
         List<Map<String, Object>> dataMaps = generatorContext.getAvailableDataMaps();
 
         // 目标存放文件夹
-        String finalFolderPath = templateContext.getFinalFolderPath();
+        String finalFolderPath = templateContext.getTemplateConfiguration().getTempFolderPath();
         // 生成后输出到的目录
-        String outRootFolder = templateContext.getOutRootFolder();
+        String outRootFolder = templateContext.getTemplateConfiguration().getOutRootFolder();
 
         // 目录、目录中的文件会依据数据扩增，这个对象存在最终的配置
         List<DirectoryConfiguration> directoryConfigurations = new ArrayList<>();
@@ -326,6 +326,19 @@ public class JDBCDataSourceGenerator implements IGenerator {
                 String directoryOut = templateProcessForName(dc.getOriginalPath(), data);
                 // 最终的路径
                 String finalPath = FileUtil.replacePath(directoryOut, finalFolderPath, outRootFolder);
+
+                String zipOrJarTempFolderName = templateContext.getZipOrJarTempFolderName();
+
+                // 最终解压后的临时模板文件夹
+                String finalTempFolderPath = directoryOut
+                        .substring(0,
+                                   directoryOut.lastIndexOf(zipOrJarTempFolderName) + zipOrJarTempFolderName.length());
+                templateContext.setFinalTempFolderPath(finalTempFolderPath);
+
+                // 最终生成文件输出文件夹
+                String finalOutRootFolder = finalPath
+                        .substring(0, finalPath.lastIndexOf(zipOrJarTempFolderName) + zipOrJarTempFolderName.length());
+                templateContext.setFinalOutRootFolder(finalOutRootFolder);
 
                 directoryConfiguration.setOriginalPath(dc.getOriginalPath());
                 directoryConfiguration.setFinalPath(finalPath);

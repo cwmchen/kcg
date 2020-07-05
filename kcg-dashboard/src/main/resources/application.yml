@@ -27,10 +27,14 @@ kaadog:
   kcg:
     dashboard:
       api-server-path: http://127.0.0.1:${server.port}
-      file-name: necs
     generator:
       template:
-        folder-path: classpath:template/db-structure
+        folder-path: classpath:template
+        #out-root-folder: d:/out
+        #folder-path: classpath:template/necs/${project}-${module}/${project}-${module}-pojo/src/main/java/${project}/${module}/pojo/entity
+        #folder-path: D:/git/kaadog/kcg/kcg-template/kcg-template-necs/src/main/resources/template/necs
+        #folder-path: D:/git/kaadog/kcg/kcg-template/kcg-template-necs/target/kcg-template-necs-20200705.0.0.4-SNAPSHOT.jar!template/necs
+        #folder-path: D:/git/kaadog/kcg/kcg-dashboard/target/kcg-dashboard.tar.gz!freemarker
       properties:
         "[project]": "necs"                           # 项目名称
         "[module]": "sys"                             # 模块名称

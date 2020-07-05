@@ -112,14 +112,14 @@ kaadog:
 
 ​		`kaadog.kcg.generator.template` 模板相关配置
 
-| 参数                   | 描述                                                         | 默认值               |
-| :--------------------- | :----------------------------------------------------------- | :------------------- |
-| folder-path            | 模板存放的文件夹，可以使用绝对路径、相对路径、classpath:、jar 文件、zip 文件、gz文件<br />1、绝对路径使用程序可以访问到的磁盘地址<br />2、相对路径一般使用../../ 的形式，相对的程序运行的目录<br />3、classpath: 程序可以访问到的类路径，如：`classpath:template` ，会获取到当前类路径可访问到的template内所有的文件夹与文件<br />4、jar 文件指定jar文件地址，可以使用  `!` 指定使用哪个文件夹作为模板文件夹，如：`xxx.jar!template`，获取当前  jar  中 `template`  文件夹中的模板<br />5、zip文件、gz 文件同 jar 文件处理一致 |                      |
-| out-root-folder        | 生成文件输出目录（目录必须存在）                             | 用户目录+wokr-folder |
-| file-suffix            | 模板后缀，非此后缀不会进行模板读取，直接复制文件到输出目录   | .flt                 |
-| file-encoding          | 模板文件编码                                                 | UTF-8                |
-| work-folder            | 进行模板相关操作的工作文件夹                                 | 用户目录+".kcg"      |
-| work-folder-retain-day | 工作空间中生成的模板保留的天数                               | 1                    |
+| 参数                   | 描述                                                         | 默认值                     |
+| :--------------------- | :----------------------------------------------------------- | :------------------------- |
+| folder-path            | 模板存放的文件夹，可以使用绝对路径、相对路径、classpath:、jar 文件、zip 文件、gz文件<br />1、绝对路径使用程序可以访问到的磁盘地址<br />2、相对路径一般使用../../ 的形式，相对的程序运行的目录<br />3、classpath: 程序可以访问到的类路径，如：`classpath:template` ，会获取到当前类路径可访问到的template内所有的文件夹与文件<br />4、jar 文件指定jar文件地址，可以使用  `!` 指定使用哪个文件夹作为模板文件夹，如：`xxx.jar!template`，获取当前  jar  中 `template`  文件夹中的模板<br />5、zip文件、gz 文件同 jar 文件处理一致 |                            |
+| file-suffix            | 模板后缀，非此后缀不会进行模板读取，直接复制文件到输出文件夹 | .flt                       |
+| file-encoding          | 模板文件编码                                                 | UTF-8                      |
+| out-root-folder        | 生成文件输出文件夹（文件夹必须存在）                         | ../out                     |
+| temp-folder-path       | 如果是 jar、zip 时此路径会执行解压路径（目录必须存在）       | 用户临时目录+/kcg/template |
+| temp-folder-retain-day | 临时生成的模板保留的天数                                     | 1                          |
 
 ​		`kaadog.kcg.generator.properties`，自定义属性内容全局可使用，会传递调每一个模板中，使用 key=value 形式指定
 

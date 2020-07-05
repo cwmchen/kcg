@@ -24,7 +24,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import com.kaadog.kcg.core.GeneratorContext.DirectoryConfiguration;
 import com.kaadog.kcg.core.GeneratorContext.FileConfiguration;
@@ -38,6 +37,8 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.core.util.ZipUtil;
 import cn.hutool.crypto.SecureUtil;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 模板上下文
@@ -49,9 +50,19 @@ import cn.hutool.crypto.SecureUtil;
  * <li>获取目录配置数据 {@link DirectoryConfiguration}</li>
  * </ol>
  */
+@Getter
+@Setter
 public class TemplateContext {
 
     private TemplateConfiguration templateConfiguration;
+
+    /** 如果是zip、jar 文件时需要解压, 防止文件夹重复生成的临时文件夹名称 */
+    private String                zipOrJarTempFolderName;
+
+    /** 最终解压后的临时模板文件夹 */
+    private String                finalTempFolderPath;
+    /** 最终生成文件输出文件夹 */
+    private String                finalOutRootFolder;
 
     /**
      * 模板名称格式化
@@ -61,25 +72,15 @@ public class TemplateContext {
     }
 
     /**
-     * 如果没有设置输出文件夹将在用户目录下建立工作文件夹
-     */
-    public String getOutRootFolder() {
-        // 不存在目录时使用用户目录
-        if (StringUtils.isBlank(this.templateConfiguration.getOutRootFolder())) {
-            return FileUtil.normalize(FileUtil.getUserHomePath() + templateConfiguration.getWorkFolder());
-        }
-        return FileUtil.normalize(this.templateConfiguration.getOutRootFolder());
-    }
-
-    /**
      * 如果是zip、jar 文件时需要解压，默认使用临时文件目录
      */
     private String getZipOrJarTemp() {
 
-        String folderPathSha256 = SecureUtil.sha256(getFolderPath());
-        String wokrFolder = FileUtil.normalize(FileUtil.getTmpDirPath() + templateConfiguration.getWorkFolder());
-        FileUtil.mkdir(wokrFolder);
-        File[] files = FileUtil.ls(wokrFolder);
+        String folderPathSha256 = SecureUtil.sha256(templateConfiguration.getFolderPath());
+        String tempFolderPath = templateConfiguration.getTempFolderPath();
+
+        FileUtil.mkdir(tempFolderPath);
+        File[] files = FileUtil.ls(tempFolderPath);
         // 创建当前模板文件夹的索引号，保障不被别的线程替换调里面的内容
         int index = 0;
         for (File file : files) {
@@ -91,8 +92,10 @@ public class TemplateContext {
                 index = index + 1;
             }
         }
-        String dirPath = FileUtil.normalize(FileUtil.getTmpDirPath() + templateConfiguration.getWorkFolder() + index
-                                            + "_" + folderPathSha256 + "/");
+        String zipOrJarTempFolderName = index + "_" + folderPathSha256;
+        setZipOrJarTempFolderName(zipOrJarTempFolderName);
+
+        String dirPath = FileUtil.normalize(tempFolderPath + "/" + zipOrJarTempFolderName + "/");
         FileUtil.mkdir(dirPath);
         return dirPath;
     }
@@ -103,28 +106,10 @@ public class TemplateContext {
     private Boolean deleteExpiredFolders(File file) {
         Date date = FileUtil.lastModifiedTime(file);
         long day = DateUtil.between(date, DateUtil.date(), DateUnit.DAY, true);
-        if (day > templateConfiguration.getWorkFolderRetainDay()) {
+        if (day > templateConfiguration.getTempFolderRetainDay()) {
             return FileUtil.del(file);
         }
         return true;
-    }
-
-    /**
-     * 获取模板原始路径
-     */
-    public String getFolderPath() {
-        String folderPath = FileUtil.normalize(FileUtil.getAbsolutePath(templateConfiguration.getFolderPath()));
-        if (folderPath.endsWith("/")) {
-            folderPath = folderPath.substring(0, folderPath.length() - 2);
-        }
-        return folderPath;
-    }
-
-    /**
-     * 获取模板最终路径
-     */
-    public String getFinalFolderPath() {
-        return templateConfiguration.getFinalFolderPath();
     }
 
     /**
@@ -145,10 +130,13 @@ public class TemplateContext {
      */
     public List<DirectoryConfiguration> getDirectoryConfigurations() {
         try {
-            String folderPath = getFolderPath();
-            String finalFolderPath = folderPath;
+            String folderPath = templateConfiguration.getFolderPath();
+            String finalTempFolderPath = "";
 
             String fileEncoding = templateConfiguration.getFileEncoding();
+
+            // 解压目录
+            String zipOrJarTemp = getZipOrJarTemp();
 
             // 当模板文件夹是 classpath 时
             if (folderPath.toLowerCase().startsWith(URLUtil.CLASSPATH_URL_PREFIX)) {
@@ -156,10 +144,8 @@ public class TemplateContext {
                 String classPathFolderPath = FileUtil
                         .normalize(StrUtil.removePrefixIgnoreCase(folderPath, URLUtil.CLASSPATH_URL_PREFIX));
 
-                // 解压目录
-                String zipOrJarTemp = getZipOrJarTemp();
                 // 最终模板存放目录
-                finalFolderPath = FileUtil.normalize(zipOrJarTemp + classPathFolderPath);
+                finalTempFolderPath = FileUtil.normalize(zipOrJarTemp + classPathFolderPath);
 
                 List<URL> urls = Collections.list(this.getClass().getClassLoader().getResources(classPathFolderPath));
 
@@ -172,7 +158,8 @@ public class TemplateContext {
                         ZipUtil.unzip(absolutePath.substring(0, index), zipOrJarTemp, Charset.forName(fileEncoding));
 
                     } else {
-                        String destPath = finalFolderPath.substring(0, FileUtil.lastIndexOfSeparator(finalFolderPath));
+                        String destPath = finalTempFolderPath
+                                .substring(0, FileUtil.lastIndexOfSeparator(finalTempFolderPath));
                         FileUtil.copy(absolutePath, destPath, true);
                     }
                 }
@@ -194,49 +181,47 @@ public class TemplateContext {
                 if (index != -1) {
                     index = index + fileSuffix.length();
 
-                    // 获取文件后对应的目录路径，如果不指定默认使用所以文件
+                    // 获取文件后缀对应的目录路径，如果不指定默认使用所有文件
                     pathTemplateFolder = folderPath.substring(index);
                     // 文件路径，去除 !xx/xx/xx 路径
                     folderPath = folderPath.substring(0, index - 1);
                 }
 
                 if (FileUtil.isFile(folderPath)) {
-                    String outFileDir = getZipOrJarTemp();
-                    finalFolderPath = outFileDir + pathTemplateFolder;
+                    finalTempFolderPath = zipOrJarTemp + pathTemplateFolder;
 
                     String extName = FileUtil.extName(folderPath);
                     if (extName.equalsIgnoreCase("jar") || extName.equalsIgnoreCase("zip")) {
-                        ZipUtil.unzip(folderPath, outFileDir, Charset.forName(fileEncoding));
+                        ZipUtil.unzip(folderPath, zipOrJarTemp, Charset.forName(fileEncoding));
                     } else if (extName.equalsIgnoreCase("gz")) {
                         // 先进行 gzip 解压为 zip 文件
                         byte[] buf = ZipUtil.unGzip(FileUtil.getInputStream(folderPath));
-                        String path = outFileDir + FileUtil.getName(folderPath) + ".zip";
+                        String path = zipOrJarTemp + FileUtil.getName(folderPath) + ".zip";
                         FileUtil.writeBytes(buf, path);
                         // 然后解压 zip 文件
-                        ZipUtil.unzip(path, outFileDir, Charset.forName(fileEncoding));
+                        ZipUtil.unzip(path, zipOrJarTemp, Charset.forName(fileEncoding));
                         FileUtil.del(path);
                     } else {
                         throw new TemplateContextException("不支持 " + extName + " 文件类型");
                     }
                 } else {
-                    // 指定为特点目录时进行复制到工作空间中
+                    // 指定为特定文件夹时进行复制到工作空间中
                     pathTemplateFolder = folderPath.substring(folderPath.lastIndexOf("/") + 1);
-                    finalFolderPath = getZipOrJarTemp();
+                    finalTempFolderPath = zipOrJarTemp;
 
-                    FileUtil.copy(new File(FileUtil.getAbsolutePath(folderPath)), FileUtil.file(finalFolderPath), true);
+                    FileUtil.copy(new File(FileUtil.getAbsolutePath(folderPath)), FileUtil.file(finalTempFolderPath),
+                                  true);
                     // 复制目录时完整复制，需要更改最终地址
-                    finalFolderPath = finalFolderPath + pathTemplateFolder;
+                    finalTempFolderPath = finalTempFolderPath + pathTemplateFolder;
                 }
             }
 
             // 设置最终模板存放的文件夹
-            templateConfiguration.setFinalFolderPath(finalFolderPath);
             List<DirectoryConfiguration> list = new ArrayList<>();
-            List<String> directoryPaths = FileUtil.getDirectoryPaths(finalFolderPath);
-
+            List<String> directoryPaths = FileUtil.getDirectoryPaths(finalTempFolderPath);
             // 当不存在子目录时设置当前目录为模板存放目录
             if (CollectionUtils.isEmpty(directoryPaths)) {
-                directoryPaths.add(finalFolderPath);
+                directoryPaths.add(finalTempFolderPath);
             }
 
             directoryPaths.forEach(directoryPath -> {
@@ -265,13 +250,4 @@ public class TemplateContext {
             throw new TemplateContextException(e);
         }
     }
-
-    public TemplateConfiguration getTemplateConfiguration() {
-        return templateConfiguration;
-    }
-
-    public void setTemplateConfiguration(TemplateConfiguration templateConfiguration) {
-        this.templateConfiguration = templateConfiguration;
-    }
-
 }
