@@ -21,19 +21,20 @@ spring:
       write-date-keys-as-timestamps: false
       write-dates-as-timestamps: false
   autoconfigure:
-    exclude: 
+    exclude:
       - org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfiguration
 kaadog:
   kcg:
     dashboard:
       api-server-path: http://127.0.0.1:${server.port}
-      cors-registrations:        - path-pattern: "/**"
+      cors-registrations:
+        - path-pattern: "/**"
           allowed-origins:
-           - "*"
+            - "*"
           allowed-headers:
-           - "*"
+            - "*"
           exposed-headers:
-           - "Access-Control-Allow-Origin"
+            - "Access-Control-Allow-Origin"
           max-age: 10
     generator:
       template:
@@ -50,16 +51,17 @@ kaadog:
         "[fhafw_version]": "${fhafw.version}"         # 平台版本占位符
         "[project_version]": "${project.version}"     # 项目版本占位符
         "[moduleClassName]": "Sys"                    # 模块启动类名前缀
-      data-sources:        - url: jdbc:mysql://127.0.0.1:3306/demo?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=UTC
+      data-sources:
+        - url: jdbc:mysql://127.0.0.1:3306/demo?useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true&failOverReadOnly=false&serverTimezone=UTC
           username: root
           password: root
       dialect:
         types:
-        - data-type: binary_integer
-          field-type: int
-        - data-type: binary_double
-          field-type: double
-        - data-type: binary_bigint
-          field-type: BigDecimal
-          class-name: java.math.BigDecimal
-          value: BigDecimal.valueOf(0)
+          - data-type: binary_integer
+            field-type: int
+          - data-type: binary_double
+            field-type: double
+          - data-type: binary_bigint
+            field-type: BigDecimal
+            class-name: java.math.BigDecimal
+            value: BigDecimal.valueOf(0)
