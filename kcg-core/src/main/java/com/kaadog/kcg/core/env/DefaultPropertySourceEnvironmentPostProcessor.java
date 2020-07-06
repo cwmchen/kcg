@@ -13,19 +13,26 @@ public class DefaultPropertySourceEnvironmentPostProcessor implements Environmen
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
 
-        String port = environment.getProperty("server.port");
-        String ip = NetUtil.getLocalhostStr();
-        if (StringUtils.isBlank(ip)) {
-            ip = "127.0.0.1";
-        }
         String contextPath = environment.getProperty("server.servlet.context-path");
-        if (StringUtils.isBlank(contextPath)) {
+        if (StringUtils.isBlank(contextPath) || "/".equals(contextPath)) {
             contextPath = "";
         }
 
-        System.setProperty("kcg.local.ip", ip);
-        System.setProperty("kcg.local.port", port);
-        System.setProperty("kcg.local.context-path", contextPath);
+        String apiServerPath = environment.getProperty("kaadog.kcg.dashboard.api-server-path");
+        if (StringUtils.isBlank(apiServerPath)) {
+            String port = environment.getProperty("server.port");
+            String ip = NetUtil.getLocalhostStr();
+            if (StringUtils.isBlank(ip)) {
+                ip = "127.0.0.1";
+            }
+            String http = "http://";
+            if (port.equals("443")) {
+                http = "https://";
+            }
+            apiServerPath = http + ip + ":" + port + contextPath;
+        }
+
+        System.setProperty("kaadog.kcg.dashboard.api-server-path", apiServerPath);
     }
 
     @Override

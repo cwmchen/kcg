@@ -17,4 +17,4 @@ KKKKKKKKK    KKKKKKK        CCCCCCCCCCCCC        GGGGGG   GGGG
 KCG:${project.version}
 Pid:${pid}
 Network:
-  http://${kcg.local.ip}:${kcg.local.port}${kcg.local.context-path}/index.html
+  ${kaadog.kcg.dashboard.api-server-path}
