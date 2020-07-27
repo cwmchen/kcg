@@ -52,8 +52,17 @@ table.tableShow tr:hover {
 	    <#list dataSources as dataSource>
 		  <#list tables as table>
 		      <#if (table.catalog == dataSource.catalog && table.schema == dataSource.schema)>
-		<tr>
-			<th colspan="7" class="tableRow">${dataSource.catalog}<#if (table.catalog != "" && dataSource.schema != "")> / ${table.schema}/<#else> / </#if>${table.tableName}</th>
+		<tr class="tableTitle">
+            <th colspan="1" class="tableRow">catalog</th>
+            <th colspan="2" class="tableRow" style="background:none;">${dataSource.catalog}</th>
+            <th colspan="1" class="tableRow">schema</th>
+            <th colspan="3" class="tableRow" style="background:none;">${dataSource.schema}</th>
+        </tr>
+		<tr class="tableTitle">
+			<th colspan="1" class="tableRow">表名</th>
+			<th colspan="2" class="tableRow" style="background:none;">${table.tableName}</th>
+		    <th colspan="1" class="tableRow">说明</th>
+		    <th colspan="3" class="tableRow" style="background:none;">${table.tableComment}</th>
 		</tr>
 		<tr class="tableTitle">
 			<th>序号</th>

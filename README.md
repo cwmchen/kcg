@@ -4,13 +4,18 @@
 
 # 它能做什么
 
-​		支持 Mysql、Oracle、DB2、Microsoft SQL Server、GaussDB、openGauss、PostgreSQL数据中心的数据结构获取，依托于数据结构使用 freemarker 模板快速生成代码
+​		支持 Mysql、Oracle、DB2、Microsoft SQL Server、GaussDB、openGauss、PostgreSQL数据中心的数据结构获取，并依托于数据结构使用 freemarker 自定义模板生成想要的目标结果，如：
+
+- 不同开发语言的代码（java、python、c、c++、c#、.net、php、......）
+- 静态 `html` 文件
+- 填充数据后的 `xml、yaml、properties` 文件
+- 其它类结果文件
 
 ## 数据中心支持情况
 
 | Mysql | Oracle | DB2    | Microsoft SQL Server | GaussDB | openGauss | PostgreSQL |
 | ----- | ------ | ------ | -------------------- | ------- | --------- | ---------- |
-| 支持  | 支持   | 计划中 | 支持                 | 支持    | 支持      | 计划中     |
+| 支持  | 支持   | 计划中 | 支持                 | 支持    | 支持      | 支持       |
 # kcg 主要功能
 
 - 多数据源支持
@@ -45,19 +50,19 @@
 
 ### 方式二：
 
-​	下载源代码自行打包，进行`Step 2`
+​	下载源代码自行编译，编译后，进行`Step 2`
 
-#### 	windows
+#### 	windows 编译指令
 
 ​			cmd 命令执行器：`mvn clean package install & mvn -f kcg-dashboard/pom.xml -P release clean package install -U`
 
 ​			PowerShell 命令执行器:	`mvn clean package install ; mvn -f kcg-dashboard/pom.xml -P release clean package install -U`
 
-#### 	linux
+#### 	linux 编译指令
 
 ​			`mvn clean package install && mvn -f kcg-dashboard/pom.xml -P release clean package install -U  `
 
-> 下载源代码，执行 maven 打包，要求具备 maven 3.5+、jdk 1.8+ 环境。
+> 下载源代码，执行 maven 编码打包命令，要求具备 maven 3.5+、jdk 1.8+ 环境。
 
 ## Step 2：工具配置
 
@@ -82,7 +87,7 @@
 
 ### 方式二：
 
-​	下载源代码，执行 maven 打包，进入 `kcg-dashboard/target/kcg-dashboard/kcg-dashboard`
+​	下载源代码，执行 maven 编码打包命令后，进入 `kcg-dashboard/target/kcg-dashboard/kcg-dashboard`
 
 - windows 双击运行  `bin/run.cmd`
 - linux  运行  `bin/run.sh`

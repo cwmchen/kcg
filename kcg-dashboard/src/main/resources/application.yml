@@ -52,8 +52,11 @@ kaadog:
         "[project_version]": "${project.version}"     # 项目版本占位符
         "[moduleClassName]": "Sys"                    # 模块启动类名前缀
       data-sources:
-        - url: jdbc:mysql://127.0.0.1:3306/demo?useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true&failOverReadOnly=false&serverTimezone=UTC
-          username: root
+#        - url: jdbc:mysql://127.0.0.1:3306/demo?useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true&failOverReadOnly=false&serverTimezone=UTC
+#          username: root
+#          password: root
+        - url: jdbc:postgresql://localhost:5432/demo
+          username: postgres
           password: root
       dialect:
         types:
@@ -65,3 +68,5 @@ kaadog:
             field-type: BigDecimal
             class-name: java.math.BigDecimal
             value: BigDecimal.valueOf(0)
+          - data-type: character varying
+            field-type: String
