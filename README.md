@@ -82,14 +82,14 @@
 
 ​	下载发行版本解压直接执行启动
 
-- windows 双击运行  `bin/run.cmd`
+- windows 双击运行或以管理员身份运行  `bin/run.cmd`
 - linux  运行  `bin/run.sh`
 
 ### 方式二：
 
 ​	下载源代码，执行 maven 编码打包命令后，进入 `kcg-dashboard/target/kcg-dashboard/kcg-dashboard`
 
-- windows 双击运行  `bin/run.cmd`
+- windows 双击运行以管理员身份运行  `bin/run.cmd`
 - linux  运行  `bin/run.sh`
 
 ## Step 5：访问生成地址
