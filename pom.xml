@@ -8,13 +8,13 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.2.5.RELEASE</version>
+		<version>2.2.9.RELEASE</version>
 	</parent>
 
 	<groupId>com.kaadog</groupId>
 	<artifactId>kcg</artifactId>
 	<name>kcg</name>
-	<version>20200727.0.0.4-RELEASE</version>
+	<version>20200831.0.0.5-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<properties>
@@ -22,7 +22,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
 
-		<kcg.version>20200727.0.0.4-RELEASE</kcg.version>
+		<kcg.version>20200831.0.0.5-SNAPSHOT</kcg.version>
 
 		<commons-collections4.version>4.1</commons-collections4.version>
 		<commons-io.version>2.6</commons-io.version>

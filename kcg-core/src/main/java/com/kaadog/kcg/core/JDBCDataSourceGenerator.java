@@ -238,7 +238,7 @@ public class JDBCDataSourceGenerator implements IGenerator {
             data.put("foreignKeys", table.getForeignKeys());
 
             Set<String> imports = table.getColumns().stream().filter(column -> {
-                return StringUtils.isNoneBlank(column.getFieldType().getClassName());
+                return StringUtils.isNotBlank(column.getFieldType().getClassName());
             }).map(column -> {
                 return column.getFieldType().getClassName();
             }).collect(Collectors.toSet());

@@ -190,7 +190,7 @@ public class DataSourceFactory {
 
                         String _isNullable = columnResultSet.getString("IS_NULLABLE");
                         Boolean isNullable = Boolean.TRUE;
-                        if (StringUtils.isNoneBlank(_isNullable)) {
+                        if (StringUtils.isNotBlank(_isNullable)) {
                             if ("no".equalsIgnoreCase(_isNullable)) {
                                 isNullable = Boolean.FALSE;
                             }
@@ -214,7 +214,7 @@ public class DataSourceFactory {
                         column.setDecimalDigits(decimalDigits);
                         column.setNumPrecRadix(numPrecRadix);
 
-                        if (StringUtils.isNoneBlank(_isNullable)) {
+                        if (StringUtils.isNotBlank(_isNullable)) {
                             column.setIsNullable(isNullable);
                         }
 
