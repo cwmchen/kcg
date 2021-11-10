@@ -22,7 +22,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 org.springframework.web.servlet.config.annotation.CorsRegistration corsRegistration = registry
                         .addMapping(ca.getPathPattern());
 
-                corsRegistration.allowedOrigins(ca.getAllowedOrigins());
+                corsRegistration.allowedOriginPatterns(ca.getAllowedOriginPatterns());
                 corsRegistration.allowedMethods(ca.getAllowedMethods());
                 corsRegistration.allowedHeaders(ca.getAllowedHeaders());
 

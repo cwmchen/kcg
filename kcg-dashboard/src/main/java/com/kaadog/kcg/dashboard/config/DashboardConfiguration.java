@@ -33,16 +33,16 @@ import lombok.Setter;
 @ConfigurationProperties("kaadog.kcg.dashboard")
 public class DashboardConfiguration {
 
-    public static final String DEFAULT_API_SERVER_PATH = "http://127.0.0.1:1666";
-    public static final String DEFAULT_FILE_NAME       = "fileName";
+    public static final String     DEFAULT_API_SERVER_PATH = "http://127.0.0.1:1666";
+    public static final String     DEFAULT_FILE_NAME       = "fileName";
 
     /** 下载时生成的文件名称, 不需要后缀 */
-    private String             fileName                = DEFAULT_FILE_NAME;
+    private String                 fileName                = DEFAULT_FILE_NAME;
     /** 接口服务地址 */
-    private String             apiServerPath           = DEFAULT_API_SERVER_PATH;
-    
+    private String                 apiServerPath           = DEFAULT_API_SERVER_PATH;
+
     /** 跨域注册器 */
-    private List<CorsRegistration>       corsRegistrations;
+    private List<CorsRegistration> corsRegistrations;
 
     public String getFileName() {
         if (StringUtils.isBlank(fileName)) {
@@ -69,18 +69,25 @@ public class DashboardConfiguration {
 
         /** 请求地址, 支持 SpEL */
         private String                        pathPattern                    = "/**";
+
         /** 哪些域名可以被允许 */
-        private List<String>                  allowedOrigins                 = DEFAULT_PERMIT_ALL;
+        private List<String>                  allowedOriginPatterns          = DEFAULT_PERMIT_ALL;
+
         /** 请求的哪些方法可以被允许 */
         private List<String>                  allowedMethods                 = DEFAULT_PERMIT_METHODS;
+
         /** 可以参与跨域访问的请求方法, 一般比 allowedMethods 多 */
         private List<HttpMethod>              resolvedMethods                = DEFAULT_METHODS;
+
         /** 表示跨域请求的头部的允许范围 */
         private List<String>                  allowedHeaders                 = DEFAULT_PERMIT_ALL;
+
         /** 表示暴露哪些头部信息，并提供给客户端 */
         private List<String>                  exposedHeaders                 = DEFAULT_PERMIT_EXPOSED_HEADERS;
+
         /** 表示是否允许客户端获取用户凭据 */
         private Boolean                       allowCredentials               = true;
+
         /** 表示预检请求的最大缓存时间 */
         private Long                          maxAge                         = 1800L;
 
@@ -92,12 +99,12 @@ public class DashboardConfiguration {
             this.pathPattern = pathPattern;
         }
 
-        public String[] getAllowedOrigins() {
-            return allowedOrigins.stream().toArray(String[]::new);
+        public String[] getAllowedOriginPatterns() {
+            return allowedOriginPatterns.stream().toArray(String[]::new);
         }
 
-        public void setAllowedOrigins(List<String> allowedOrigins) {
-            this.allowedOrigins = allowedOrigins;
+        public void setAllowedOriginPatterns(List<String> allowedOriginPatterns) {
+            this.allowedOriginPatterns = allowedOriginPatterns;
         }
 
         public String[] getAllowedMethods() {

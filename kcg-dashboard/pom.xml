@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>com.kaadog</groupId>
 		<artifactId>kcg</artifactId>
-		<version>20200727.0.0.4-SNAPSHOT</version>
+		<version>20200831.0.0.5-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
@@ -102,42 +102,28 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>com.huawei.gauss</groupId>
-			<artifactId>com.huawei.gauss.jdbc.ZenithDriver</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.oracle</groupId>
-			<artifactId>ojdbc7</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.microsoft.sqlserver</groupId>
-			<artifactId>mssql-jdbc</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.ibm.informix</groupId>
-			<artifactId>jdbc</artifactId>
-		</dependency>
+		<!-- <dependency> <groupId>com.huawei.gauss</groupId> <artifactId>com.huawei.gauss.jdbc.ZenithDriver</artifactId> 
+			</dependency> <dependency> <groupId>com.oracle</groupId> <artifactId>ojdbc7</artifactId> 
+			</dependency> <dependency> <groupId>com.microsoft.sqlserver</groupId> <artifactId>mssql-jdbc</artifactId> 
+			</dependency> <dependency> <groupId>org.postgresql</groupId> <artifactId>postgresql</artifactId> 
+			</dependency> <dependency> <groupId>com.ibm.informix</groupId> <artifactId>jdbc</artifactId> 
+			</dependency> -->
 		<dependency>
 			<groupId>com.kaadog</groupId>
 			<artifactId>kcg-core</artifactId>
 			<version>${kcg.version}</version>
 		</dependency>
 
-        <dependency>
-            <groupId>com.kaadog</groupId>
-            <artifactId>kcg-template-necs</artifactId>
-            <version>${kcg.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.kaadog</groupId>
-            <artifactId>kcg-template-db-structure</artifactId>
-            <version>${kcg.version}</version>
-        </dependency>
+		<dependency>
+			<groupId>com.kaadog</groupId>
+			<artifactId>kcg-template-necs</artifactId>
+			<version>${kcg.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.kaadog</groupId>
+			<artifactId>kcg-template-db-structure</artifactId>
+			<version>${kcg.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>

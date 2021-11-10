@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>com.kaadog</groupId>
 		<artifactId>kcg</artifactId>
-		<version>20200727.0.0.4-SNAPSHOT</version>
+		<version>20200831.0.0.5-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 

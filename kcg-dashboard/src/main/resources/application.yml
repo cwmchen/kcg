@@ -4,15 +4,19 @@ server:
 spring:
   application:
     name: kaadog-code-generator
-  resources:
-    add-mappings: true
-    static-locations:
-      - classpath:/dashboard/static/
+  web:
+    resources:
+      add-mappings: true
+      static-locations:
+        - classpath:/dashboard/static/
+    locale: zh_CN
   mvc:
     static-path-pattern: /**
     throw-exception-if-no-handler-found: true
-    locale: zh_CN
-    date-format: yyyy-MM-dd HH:mm:ss
+    format:
+      date: yyyy-MM-dd
+      time: HH:mm:ss
+      date-time: yyyy-MM-dd HH:mm:ss
   jackson:
     time-zone: GMT+8
     locale: zh_CN
@@ -29,7 +33,7 @@ kaadog:
       api-server-path: http://127.0.0.1:${server.port}
       cors-registrations:
         - path-pattern: "/**"
-          allowed-origins:
+          allowed-origin-patterns: 
             - "*"
           allowed-headers:
             - "*"
@@ -38,8 +42,9 @@ kaadog:
           max-age: 10
     generator:
       template:
-        folder-path: classpath:template
-        #out-root-folder: d:/out
+#        folder-path: classpath:template
+        out-root-folder: d:/out
+        folder-path: D:/git/kcg/kcg-template/kcg-template-db-structure/src/main/resources/template/db-structure
         #folder-path: classpath:template/necs/${project}-${module}/${project}-${module}-pojo/src/main/java/${project}/${module}/pojo/entity
         #folder-path: D:/git/kaadog/kcg/kcg-template/kcg-template-necs/src/main/resources/template/necs
         #folder-path: D:/git/kaadog/kcg/kcg-template/kcg-template-necs/target/kcg-template-necs-20200705.0.0.4-SNAPSHOT.jar!template/necs
@@ -52,9 +57,13 @@ kaadog:
         "[project_version]": "${project.version}"     # 项目版本占位符
         "[moduleClassName]": "Sys"                    # 模块启动类名前缀
       data-sources:
-        - url: jdbc:mysql://127.0.0.1:3306/demo?useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true&failOverReadOnly=false&serverTimezone=UTC
-          username: root
-          password: root
+        - url: jdbc:mysql://192.168.43.6:3306/fhafw?useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true&failOverReadOnly=false&serverTimezone=UTC
+          username: fhafw
+          password: fhafw123456
+          table-names:            - video_camera
+            - video_group 
+            - video_photograph 
+            - ml_portrait
 #        - url: jdbc:postgresql://localhost:5432/demo
 #          username: postgres
 #          password: root
