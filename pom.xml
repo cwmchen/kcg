@@ -34,7 +34,7 @@
 		<com.huawei.gauss.jdbc.ZenithDriver.version>GaussDB_100_1.0.1.SPC2.B002</com.huawei.gauss.jdbc.ZenithDriver.version>
 		<ojdbc7.version>12.1.0.1.0</ojdbc7.version>
 		<mssql-jdbc.version>8.2.2.jre8</mssql-jdbc.version>
-		<postgresql.version>42.2.13</postgresql.version>
+		<postgresql.version>42.4.1</postgresql.version>
 		<informix.jdbc>4.50.3</informix.jdbc>
 
 	</properties>
