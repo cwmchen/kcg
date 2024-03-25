@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2020 the original author or authors.
+ * Copyright 2020-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 
-import org.apache.commons.lang3.StringUtils;
+import cn.hutool.core.util.ObjUtil;
 
 public enum JdbcEnum {
 
@@ -44,7 +44,7 @@ public enum JdbcEnum {
         }
     }
 
-    private JdbcEnum(String prefix, String driverClassName){
+    private JdbcEnum(String prefix, String driverClassName) {
         this.prefix = prefix;
         this.driverClassName = driverClassName;
     }
@@ -58,7 +58,7 @@ public enum JdbcEnum {
     }
 
     public static JdbcEnum getJdbcEnum(String url) {
-        if (StringUtils.isBlank(url)) {
+        if (ObjUtil.isEmpty(url)) {
             throw new IllegalArgumentException("url must not be null");
         }
         Optional<Entry<String, JdbcEnum>> optional = mappings.entrySet().stream().filter(o -> {

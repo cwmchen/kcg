@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2020 the original author or authors.
+ * Copyright 2020-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,27 +31,29 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Table implements Serializable {
 
-    private static final long serialVersionUID = -7342856478709410269L;
+    private static final long serialVersionUID       = -7342856478709410269L;
 
-    private String            catalog          = "";
-    private String            schema           = "";
+    private String            catalog                = "";
+    private String            schema                 = "";
 
     /** table,view */
-    private TableTypeEnum     tableType        = TableTypeEnum.TABLE;
-    private String            tableName        = "";
-    private String            tableComment     = "";
+    private TableTypeEnum     tableType              = TableTypeEnum.TABLE;
+    private String            tableName              = "";
+    private String            tableComment           = "";
 
     /** 生成类名称 */
-    private String            className        = "";
+    private String            className              = "";
+    /** 字段名称，首字母大写 */
+    private String            classNameLastLowercase = "";
 
     /** 包含的列 */
-    private List<Column>      columns          = new ArrayList<>();
+    private List<Column>      columns                = new ArrayList<>();
     /** 索引 */
-    private List<Index>       indexs           = new ArrayList<>(1);
+    private List<Index>       indexs                 = new ArrayList<>(1);
     /** 包含的主键 */
-    private List<PrimaryKey>  primaryKeys      = new ArrayList<>(1);
+    private List<PrimaryKey>  primaryKeys            = new ArrayList<>(1);
     /** 包含的外键 */
-    private List<ForeignKey>  foreignKeys      = new ArrayList<>(1);
+    private List<ForeignKey>  foreignKeys            = new ArrayList<>(1);
 
     public Table addColumn(Column column) {
         columns.add(column);

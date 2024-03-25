@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2020 the original author or authors.
+ * Copyright 2020-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,8 +29,6 @@ import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.kaadog.kcg.core.GeneratorContext.DirectoryConfiguration;
 import com.kaadog.kcg.core.GeneratorContext.FileConfiguration;
 import com.kaadog.kcg.core.configuration.DataSourceConfiguration;
@@ -47,6 +45,7 @@ import com.kaadog.kcg.core.mapping.Table;
 import com.kaadog.kcg.core.properties.GeneratorProperties;
 import com.kaadog.kcg.core.utils.FileUtil;
 
+import cn.hutool.core.util.ObjUtil;
 import freemarker.cache.FileTemplateLoader;
 import freemarker.cache.StringTemplateLoader;
 import freemarker.template.Template;
@@ -69,7 +68,7 @@ public class JDBCDataSourceGenerator implements IGenerator {
 
     private List<Exception>           exceptions        = new ArrayList<>();
 
-    public JDBCDataSourceGenerator(GeneratorProperties generatorProperties){
+    public JDBCDataSourceGenerator(GeneratorProperties generatorProperties) {
         this.generatorProperties = generatorProperties;
     }
 
@@ -198,6 +197,7 @@ public class JDBCDataSourceGenerator implements IGenerator {
      * <li>tableName: 表名称</li>
      * <li>tableComment: 表注释类型</li>
      * <li>className: 生成的类名</li>
+     * <li>classNameLastLowercase: 生成的类名，首字母小写</li>
      * <li>columns: 表包含的列集合</li>
      * <li>indexs: 表包含的索引集合</li>
      * <li>primaryKeys: 表包含的主键集合</li>
@@ -231,6 +231,7 @@ public class JDBCDataSourceGenerator implements IGenerator {
             data.put("tableName", table.getTableName());
             data.put("tableComment", table.getTableComment());
             data.put("className", table.getClassName());
+            data.put("classNameLastLowercase", table.getClassNameLastLowercase());
 
             data.put("columns", table.getColumns());
             data.put("indexs", table.getColumns());
@@ -238,7 +239,7 @@ public class JDBCDataSourceGenerator implements IGenerator {
             data.put("foreignKeys", table.getForeignKeys());
 
             Set<String> imports = table.getColumns().stream().filter(column -> {
-                return StringUtils.isNotBlank(column.getFieldType().getClassName());
+                return ObjUtil.isNotEmpty(column.getFieldType().getClassName());
             }).map(column -> {
                 return column.getFieldType().getClassName();
             }).collect(Collectors.toSet());

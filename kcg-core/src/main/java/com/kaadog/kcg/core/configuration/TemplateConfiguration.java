@@ -1,9 +1,8 @@
 package com.kaadog.kcg.core.configuration;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.kaadog.kcg.core.utils.FileUtil;
 
+import cn.hutool.core.util.ObjUtil;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -56,7 +55,7 @@ public class TemplateConfiguration {
     }
 
     public String getTempFolderPath() {
-        if (StringUtils.isBlank(tempFolderPath)) {
+        if (ObjUtil.isEmpty(tempFolderPath)) {
             return FileUtil.normalize(FileUtil.getAbsolutePath(FileUtil.getTmpDir()) + DEFAULT_TEMP_TEMPLATE_FOLDER);
         }
         return FileUtil.normalize(FileUtil.getAbsolutePath(tempFolderPath));

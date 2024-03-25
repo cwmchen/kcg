@@ -1,4 +1,4 @@
-debug: true
+debug: false
 server:
   port: 1666
 spring:
@@ -12,7 +12,6 @@ spring:
     locale: zh_CN
   mvc:
     static-path-pattern: /**
-    throw-exception-if-no-handler-found: true
     format:
       date: yyyy-MM-dd
       time: HH:mm:ss
@@ -42,9 +41,9 @@ kaadog:
           max-age: 10
     generator:
       template:
-#        folder-path: classpath:template
+        folder-path: classpath:template
         out-root-folder: d:/out
-        folder-path: D:/git/kcg/kcg-template/kcg-template-db-structure/src/main/resources/template/db-structure
+#        folder-path: D:/git/kcg/kcg-template/kcg-template-db-structure/src/main/resources/template/db-structure
         #folder-path: classpath:template/necs/${project}-${module}/${project}-${module}-pojo/src/main/java/${project}/${module}/pojo/entity
         #folder-path: D:/git/kaadog/kcg/kcg-template/kcg-template-necs/src/main/resources/template/necs
         #folder-path: D:/git/kaadog/kcg/kcg-template/kcg-template-necs/target/kcg-template-necs-20200705.0.0.4-SNAPSHOT.jar!template/necs
@@ -57,13 +56,11 @@ kaadog:
         "[project_version]": "${project.version}"     # 项目版本占位符
         "[moduleClassName]": "Sys"                    # 模块启动类名前缀
       data-sources:
-        - url: jdbc:mysql://192.168.43.6:3306/fhafw?useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true&failOverReadOnly=false&serverTimezone=UTC
-          username: fhafw
-          password: fhafw123456
-          table-names:            - video_camera
-            - video_group 
-            - video_photograph 
-            - ml_portrait
+        - url: jdbc:mysql://192.168.43.6:3306/vs_db?useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true&failOverReadOnly=false&serverTimezone=UTC
+          username: root
+          password: mysqlpass
+#          table-names:
+#            - va_track_scene
 #        - url: jdbc:postgresql://localhost:5432/demo
 #          username: postgres
 #          password: root

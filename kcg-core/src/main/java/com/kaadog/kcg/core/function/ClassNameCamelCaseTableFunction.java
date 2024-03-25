@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2020 the original author or authors.
+ * Copyright 2020-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,9 @@ import java.sql.Connection;
 import java.util.Arrays;
 import java.util.List;
 
-import cn.hutool.core.util.StrUtil;
 import com.kaadog.kcg.core.mapping.Table;
+
+import cn.hutool.core.util.StrUtil;
 
 /**
  * 类名使用驼峰命名，并且进行特殊标识字符串进行替换
@@ -55,6 +56,7 @@ public class ClassNameCamelCaseTableFunction implements TransformFunction<Connec
             String className = table.getClassName();
             className = StrUtil.upperFirst(StrUtil.toCamelCase(className));
             table.setClassName(className);
+            table.setClassNameLastLowercase(StrUtil.lowerFirst(className));
         });
     }
 

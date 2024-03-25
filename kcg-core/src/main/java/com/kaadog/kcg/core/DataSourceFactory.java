@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2020 the original author or authors.
+ * Copyright 2020-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.kaadog.kcg.core;
 
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
@@ -25,9 +26,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
-
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import com.kaadog.kcg.core.configuration.DataSourceConfiguration;
 import com.kaadog.kcg.core.configuration.DialectConfiguration;
@@ -42,6 +40,7 @@ import com.kaadog.kcg.core.mapping.Index;
 import com.kaadog.kcg.core.mapping.PrimaryKey;
 import com.kaadog.kcg.core.mapping.Table;
 
+import cn.hutool.core.util.ObjUtil;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -67,13 +66,21 @@ public class DataSourceFactory {
      * @throws ClassNotFoundException
      * @throws IllegalAccessException
      * @throws InstantiationException
+     * @throws SecurityException
+     * @throws NoSuchMethodException
+     * @throws InvocationTargetException
+     * @throws IllegalArgumentException
      */
     private Connection createConnection(DataSourceConfiguration dataSourceConfiguration) throws SQLException,
                                                                                          InstantiationException,
                                                                                          IllegalAccessException,
-                                                                                         ClassNotFoundException {
+                                                                                         ClassNotFoundException,
+                                                                                         IllegalArgumentException,
+                                                                                         InvocationTargetException,
+                                                                                         NoSuchMethodException,
+                                                                                         SecurityException {
 
-        if (StringUtils.isBlank(dataSourceConfiguration.getDriverClassName())) {
+        if (ObjUtil.isEmpty(dataSourceConfiguration.getDriverClassName())) {
             JdbcEnum jdbcEnum = JdbcEnum.getJdbcEnum(dataSourceConfiguration.getUrl());
             if (Objects.isNull(jdbcEnum)) {
                 throw new IllegalArgumentException("jdbcEnum must not be null");
@@ -82,7 +89,7 @@ public class DataSourceFactory {
             dataSourceConfiguration.setDriverClassName(jdbcEnum.getDriverClassName());
         }
         log.info("开始加载数据库驱动 {}", dataSourceConfiguration.getDriverClassName());
-        Class.forName(dataSourceConfiguration.getDriverClassName()).newInstance();
+        Class.forName(dataSourceConfiguration.getDriverClassName()).getConstructor().newInstance();
         log.info("成功加载数据库驱动 {}", dataSourceConfiguration.getDriverClassName());
 
         Properties properties = new Properties();
@@ -114,10 +121,10 @@ public class DataSourceFactory {
                 String schema = dsc.getSchema();
 
                 // 从连接对象获取 catalog
-                if (StringUtils.isBlank(catalog)) {
+                if (ObjUtil.isEmpty(catalog)) {
                     catalog = connection.getCatalog();
                 }
-                if (StringUtils.isBlank(catalog)) {
+                if (ObjUtil.isEmpty(catalog)) {
                     catalog = "";
                     dsc.setCatalog("");
                 } else {
@@ -125,10 +132,10 @@ public class DataSourceFactory {
                 }
 
                 // 从连接对象获取 schema
-                if (StringUtils.isBlank(schema)) {
+                if (ObjUtil.isEmpty(schema)) {
                     schema = connection.getSchema();
                 }
-                if (StringUtils.isBlank(schema)) {
+                if (ObjUtil.isEmpty(schema)) {
                     schema = "";
                     dsc.setSchema("");
                 } else {
@@ -136,7 +143,7 @@ public class DataSourceFactory {
                 }
 
                 // 未指定加载表名称时获取所有的表名称
-                if (CollectionUtils.isEmpty(dsc.getTableNames())) {
+                if (ObjUtil.isEmpty(dsc.getTableNames())) {
                     ResultSet rs = databaseMetaData.getTables(catalog, schema, null,
                                                               dsc.getTypes().stream().map(type -> {
                                                                   return type.name();
@@ -150,7 +157,7 @@ public class DataSourceFactory {
                 log.info("加载表数据，待加载数 size={},tableNames={}", dsc.getTableNames().size(), dsc.getTableNames());
                 for (String tableName : dsc.getTableNames()) {
 
-                    if (StringUtils.isBlank(tableName)) {
+                    if (ObjUtil.isEmpty(tableName)) {
                         continue;
                     }
 
@@ -163,7 +170,7 @@ public class DataSourceFactory {
                     while (tableResultSet.next()) {
                         TableTypeEnum tableType = TableTypeEnum.valueOf(tableResultSet.getString("TABLE_TYPE"));
                         String remarks = tableResultSet.getString("REMARKS");
-                        remarks = StringUtils.isBlank(remarks) ? "" : remarks;
+                        remarks = ObjUtil.isEmpty(remarks) ? "" : remarks;
 
                         table.setCatalog(catalog);
                         table.setSchema(schema);
@@ -190,17 +197,17 @@ public class DataSourceFactory {
 
                         String _isNullable = columnResultSet.getString("IS_NULLABLE");
                         Boolean isNullable = Boolean.TRUE;
-                        if (StringUtils.isNotBlank(_isNullable)) {
+                        if (ObjUtil.isNotEmpty(_isNullable)) {
                             if ("no".equalsIgnoreCase(_isNullable)) {
                                 isNullable = Boolean.FALSE;
                             }
                         }
 
                         String columnDef = columnResultSet.getString("COLUMN_DEF");
-                        columnDef = StringUtils.isBlank(columnDef) ? "" : columnDef;
+                        columnDef = ObjUtil.isEmpty(columnDef) ? "" : columnDef;
 
                         String remarks = columnResultSet.getString("REMARKS");
-                        remarks = StringUtils.isBlank(remarks) ? "" : remarks;
+                        remarks = ObjUtil.isEmpty(remarks) ? "" : remarks;
 
                         int ordinalPosition = columnResultSet.getInt("ORDINAL_POSITION");
 
@@ -214,7 +221,7 @@ public class DataSourceFactory {
                         column.setDecimalDigits(decimalDigits);
                         column.setNumPrecRadix(numPrecRadix);
 
-                        if (StringUtils.isNotBlank(_isNullable)) {
+                        if (ObjUtil.isNotEmpty(_isNullable)) {
                             column.setIsNullable(isNullable);
                         }
 
@@ -302,7 +309,7 @@ public class DataSourceFactory {
                     tables.add(table);
                 }
 
-                if (CollectionUtils.isNotEmpty(this.tableFunctions)) {
+                if (ObjUtil.isEmpty(this.tableFunctions)) {
                     log.info("tableFunctions 函数处理，size={}", this.tableFunctions.size());
                     this.tableFunctions.sort(Comparator.comparing(TransformFunction::getOrder));
                     this.tableFunctions.forEach(tableFunction -> {
@@ -310,7 +317,7 @@ public class DataSourceFactory {
                     });
                 }
 
-                if (CollectionUtils.isNotEmpty(this.columnFunctions)) {
+                if (ObjUtil.isEmpty(this.columnFunctions)) {
                     log.info("columnFunctions 函数处理，size={}", this.columnFunctions.size());
                     tables.forEach(table -> {
                         this.columnFunctions.sort(Comparator.comparing(TransformFunction::getOrder));
@@ -321,7 +328,8 @@ public class DataSourceFactory {
                 }
             }
 
-        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
+        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException
+                | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
             throw new DataSourceFactoryException(e);
         }
 
@@ -351,7 +359,7 @@ public class DataSourceFactory {
     }
 
     public DataSourceFactory setDataSourceConfigurations(List<DataSourceConfiguration> dataSourceConfigurations) {
-        if (CollectionUtils.isEmpty(dataSourceConfigurations)) {
+        if (ObjUtil.isEmpty(dataSourceConfigurations)) {
             return this;
         }
         this.dataSourceConfigurations = dataSourceConfigurations;

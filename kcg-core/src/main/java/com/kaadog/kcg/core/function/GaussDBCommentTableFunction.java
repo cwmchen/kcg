@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2020 the original author or authors.
+ * Copyright 2020-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,13 +22,12 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.huawei.gauss.jdbc.GaussConnection;
-
-import cn.hutool.core.util.ClassLoaderUtil;
 import com.kaadog.kcg.core.enums.JdbcEnum;
 import com.kaadog.kcg.core.mapping.Table;
+
+import cn.hutool.core.util.ClassLoaderUtil;
+import cn.hutool.core.util.ObjUtil;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -55,7 +54,7 @@ public class GaussDBCommentTableFunction implements TransformFunction<Connection
                 String remarks = resultSet.getString("REMARKS");
 
                 // 设置 table 备注信息
-                if (StringUtils.isBlank(columnName)) {
+                if (ObjUtil.isEmpty(columnName)) {
                     tables.stream().filter(table -> {
                         return table.getTableName().equalsIgnoreCase(tableName);
                     }).findFirst().map(table -> {

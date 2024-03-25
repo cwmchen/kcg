@@ -2,16 +2,16 @@ package com.kaadog.kcg.dashboard.filter;
 
 import java.io.IOException;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.annotation.WebFilter;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.kaadog.kcg.dashboard.config.DashboardConfiguration;
+
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.annotation.WebFilter;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * 相应请求结果为 api 服务地址
@@ -21,7 +21,7 @@ public class PathFilter extends OncePerRequestFilter {
 
     private final String apServierPath;
 
-    public PathFilter(DashboardConfiguration dashboardConfiguration){
+    public PathFilter(DashboardConfiguration dashboardConfiguration) {
         StringBuilder path = new StringBuilder("var _globalPath ='");
         path.append(dashboardConfiguration.getApiServerPath());
         path.append("';");

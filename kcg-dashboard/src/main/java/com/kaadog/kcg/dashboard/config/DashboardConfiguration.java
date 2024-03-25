@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2020 the original author or authors.
+ * Copyright 2020-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,12 @@ package com.kaadog.kcg.dashboard.config;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 
+import cn.hutool.core.util.ObjUtil;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -45,7 +45,7 @@ public class DashboardConfiguration {
     private List<CorsRegistration> corsRegistrations;
 
     public String getFileName() {
-        if (StringUtils.isBlank(fileName)) {
+        if (ObjUtil.isEmpty(fileName)) {
             return DEFAULT_FILE_NAME;
         }
         return fileName;

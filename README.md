@@ -42,7 +42,7 @@
 
 ## Step 1： 获取工具
 
-​		kcg 是一个 **spring boot** 项目，要求具备 **maven 3.5+、jdk1.8+** 环境。
+​		kcg 是一个 **spring boot** 项目，要求具备 **maven 3.5+、jdk17+** 环境。
 
 ### 方式一：
 

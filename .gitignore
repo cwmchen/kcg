@@ -9,6 +9,7 @@ logs/
 
 # Compiled class file
 *.class
+.flattened-pom.xml
 
 # Log file
 *.log

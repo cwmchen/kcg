@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2020 the original author or authors.
+ * Copyright 2020-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,16 +27,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Column implements Serializable {
 
-    private static final long        serialVersionUID = -4104378105904177409L;
+    private static final long        serialVersionUID        = -4104378105904177409L;
 
-    private String                   catalog          = "";
-    private String                   schema           = "";
-    private String                   tableName        = "";
+    private String                   catalog                 = "";
+    private String                   schema                  = "";
+    private String                   tableName               = "";
 
     /** 列名 */
-    private String                   columnName       = "";
+    private String                   columnName              = "";
+
     /** 数据类型 */
-    private String                   dataType         = "";
+    private String                   dataType                = "";
     /** 列长度 */
     private int                      columnSize;
     /** 列的小数位数 */
@@ -44,16 +45,20 @@ public class Column implements Serializable {
     /** 列的基数 */
     private int                      numPrecRadix;
     /** 是否为空 */
-    private Boolean                  isNullable       = Boolean.TRUE;
+    private Boolean                  isNullable              = Boolean.TRUE;
     /** 默认值 */
-    private String                   columnDef        = "";
+    private String                   columnDef               = "";
     /** 顺序 */
     private int                      ordinalPosition;
     /** 注释 */
-    private String                   columnComment    = "";
+    private String                   columnComment           = "";
+
     /** 字段名称 */
-    private String                   fieldName        = "";
+    private String                   fieldName               = "";
+    /** 字段名称，首字母大写 */
+    private String                   fieldNameFirstUpperCase = "";
+
     /** 字段类型 */
-    private TypeMappingConfiguration fieldType        = new TypeMappingConfiguration();
+    private TypeMappingConfiguration fieldType               = new TypeMappingConfiguration();
 
 }

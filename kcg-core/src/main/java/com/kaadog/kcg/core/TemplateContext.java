@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2020 the original author or authors.
+ * Copyright 2020-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,8 +23,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.collections4.CollectionUtils;
-
 import com.kaadog.kcg.core.GeneratorContext.DirectoryConfiguration;
 import com.kaadog.kcg.core.GeneratorContext.FileConfiguration;
 import com.kaadog.kcg.core.configuration.TemplateConfiguration;
@@ -33,6 +31,7 @@ import com.kaadog.kcg.core.utils.FileUtil;
 
 import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.core.util.ZipUtil;
@@ -220,7 +219,7 @@ public class TemplateContext {
             List<DirectoryConfiguration> list = new ArrayList<>();
             List<String> directoryPaths = FileUtil.getDirectoryPaths(finalTempFolderPath);
             // 当不存在子目录时设置当前目录为模板存放目录
-            if (CollectionUtils.isEmpty(directoryPaths)) {
+            if (ObjUtil.isEmpty(directoryPaths)) {
                 directoryPaths.add(finalTempFolderPath);
             }
 
